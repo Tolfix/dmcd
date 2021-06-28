@@ -23,6 +23,7 @@ import ce from "command-exists";
 import AW from "./Lib/Async";
 import prompt from "prompt";
 import fs from "fs";
+import { GenString } from "./Lib/Generator";
 
 export interface ISetupPrompt
 {
@@ -89,7 +90,7 @@ export async function Setup()
             description: "The port for mongodb (defualt: 27017)",
             default: 27017
         }
-    ], (err, result) => {
+    ], async (err, result) => {
         if(err)
             return log.error(`Something went wrong, try again later!`);
 
@@ -101,7 +102,9 @@ export async function Setup()
         const password = info.password;
         const title = info.title;
 
-        const all = `MONGODB_URI=${mongodb_url}\nTITLE=${title}`;
+        const [Session_Secret, E_Error] = await AW(GenString(53));
+
+        const all = `MONGODB_URI=${mongodb_url}\nTITLE=${title}\nSESSION_SECRET=${Session_Secret}`;
 
         fs.appendFile('.env', all, function (err) {
             if (err) throw err;
