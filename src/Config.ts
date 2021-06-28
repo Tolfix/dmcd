@@ -1,0 +1,1 @@
+export const DebugMode = process.env.DEBUG === "true" ? true : false;
