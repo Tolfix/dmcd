@@ -1,5 +1,6 @@
 import { Router, Application } from "express";
 import passport from "passport";
+import EnsureAuth from "../Middlewares/EnsureAuth";
 
 export default class MainRouter {
     protected server: Application;
@@ -10,8 +11,8 @@ export default class MainRouter {
         this.router = Router();
         this.server.use("/", this.router);
 
-        this.router.get("/", (req, res) => {
-
+        this.router.get("/", EnsureAuth, (req, res) => {
+            res.render("Main");
         });
 
         this.router.get("/login", (req, res) => {
