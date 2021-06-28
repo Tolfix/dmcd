@@ -24,17 +24,21 @@ import AW from "./Lib/Async";
 import prompt from "prompt";
 import fs from "fs";
 import { GenString } from "./Lib/Generator";
+import User from "./Models/User";
+import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
 
 export interface ISetupPrompt
 {
     password: string;
     title: string;
-    mongodb_username: string;
-    mongodb_admin: string;
-    mongodb_password: string;
-    mongodb_db: string;
-    mongodb_ip: string;
-    mongodb_port: string;
+    mongodb_uri?: string;
+    // mongodb_username?: string;
+    // mongodb_admin?: string;
+    // mongodb_password?: string;
+    // mongodb_db?: string;
+    // mongodb_ip?: string;
+    // mongodb_port?: string;
 }
 
 export async function Setup()
@@ -65,38 +69,43 @@ export async function Setup()
             description: "Title of this web app",
         },
         {
-            name: "mongodb_username",
-            description: "Username for the mongodb username",
-        },
-        {
-            name: "mongodb_admin",
-            description: "Is this user admin?",
-            default: false
-        },
-        {
-            name: "mongodb_password",
-            description: "Password for the user for mongodb",
-        },
-        {
-            name: "mongodb_db",
-            description: "The database name",
-        },
-        {
-            name: "mongodb_ip",
-            description: "The IP or FQDN where the mongodb is located at",
-        },
-        {
-            name: "mongodb_port",
-            description: "The port for mongodb (defualt: 27017)",
-            default: 27017
+            name: "mongodb_uri",
+            description: "Mongodb URL",
         }
+        // {
+        //     name: "mongodb_username",
+        //     description: "Username for the mongodb username",
+        // },
+        // {
+        //     name: "mongodb_admin",
+        //     description: "Is this user admin?",
+        //     default: false
+        // },
+        // {
+        //     name: "mongodb_password",
+        //     description: "Password for the user for mongodb",
+        // },
+        // {
+        //     name: "mongodb_db",
+        //     description: "The database name",
+        // },
+        // {
+        //     name: "mongodb_ip",
+        //     description: "The IP or FQDN where the mongodb is located at",
+        // },
+        // {
+        //     name: "mongodb_port",
+        //     description: "The port for mongodb (defualt: 27017)",
+        //     default: 27017
+        // }
     ], async (err, result) => {
         if(err)
             return log.error(`Something went wrong, try again later!`);
 
         const info = result as unknown as ISetupPrompt
 
-        const mongodb_url = `mongodb://${info.mongodb_username}:${info.mongodb_password}@${info.mongodb_ip}:${info.mongodb_port}/${info.mongodb_db}${info.mongodb_admin === "true" ? "?authSource=admin" : ""}`
+        // const mongodb_url = `mongodb://${info.mongodb_username}:${info.mongodb_password}@${info.mongodb_ip}:${info.mongodb_port}/${info.mongodb_db}${info.mongodb_admin === "true" ? "?authSource=admin" : ""}`
+        const mongodb_url = info.mongodb_uri
 
         // TODO Create an admin user with this password
         const password = info.password;
@@ -108,7 +117,29 @@ export async function Setup()
 
         fs.appendFile('.env', all, function (err) {
             if (err) throw err;
-            log.info('Setup complete!');
+
+            mongoose.connect(mongodb_url ?? "", {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+                useCreateIndex: true,
+            });
+
+            bcrypt.genSalt(10, (err, salt) => {
+                bcrypt.hash(password, salt, (err, hash) => {
+                    if(err)
+                        log.error(err, log.trace())
+
+                    new User({
+                        username: "admin",
+                        password: hash,
+                    }).save().then(a => {
+                        log.info("Admin user created for setup");
+                        log.info('Setup complete!');
+                        process.exit(1);
+                    });
+                });
+            });
+
         });
     });
 };  
