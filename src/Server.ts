@@ -12,8 +12,12 @@ import { PORT, Web_Title, MongoDB_URI, Domain, Session_Secret } from "./Config"
 import Auth from "./Passport/Auth";
 import MainRouter from "./Routers/Main";
 import MongodbEvent from "./Events/Mongodb";
+import { Server } from "http"
+import SocketIo from "./Socket/Sockets";
 
 const server = express();
+const httpServer = new Server(server)
+const io = (new SocketIo(httpServer)).io;
 
 mongoose.connect(MongoDB_URI, {
     useNewUrlParser: true,
@@ -70,6 +74,6 @@ server.use((req, res, next) => {
     next();
 });
 
-new MainRouter(server);
+new MainRouter(server, io);
     
 server.listen(PORT, () => log.info(`Server listing on port: ${PORT}`, log.trace()));

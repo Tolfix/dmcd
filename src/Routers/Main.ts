@@ -1,13 +1,16 @@
 import { Router, Application } from "express";
 import passport from "passport";
 import EnsureAuth from "../Middlewares/EnsureAuth";
+import { Server } from "socket.io";
 
 export default class MainRouter {
     protected server: Application;
     protected router: Router;
+    protected io: Server;
 
-    constructor(server: Application) {
+    constructor(server: Application, io: Server) {
         this.server = server;
+        this.io = io;
         this.router = Router();
         this.server.use("/", this.router);
 
