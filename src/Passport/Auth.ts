@@ -8,14 +8,13 @@ import User from '../Models/User';
 
 export default function Auth(passport: PassportStatic) {
     passport.use(
-        new LocalStrategy({ usernameField: 'email' }, (email, password, done) => 
+        new LocalStrategy({ usernameField: 'username' }, (username, password, done) => 
         {
             User.findOne({
-                email: email,
+                username: username,
             }).then((user) => {
                 if (!user) {
-                    log.warning(`Someone tried to login with email: ${email}`)
-                    return done(null, false, { message: 'That email is not registered' });
+                    return done(null, false, { message: 'That username is not registered' });
                 }
 
                 // Match password
