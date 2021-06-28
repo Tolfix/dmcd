@@ -1,3 +1,4 @@
+require("dotenv").config()
 import express from "express";
 import expressLayout from "express-ejs-layouts";
 import passport from "passport";
@@ -10,6 +11,7 @@ import log from "./Lib/Logger";
 import { PORT, Web_Title, MongoDB_URI, Domain, Session_Secret } from "./Config"
 import Auth from "./Passport/Auth";
 import MainRouter from "./Routers/Main";
+import MongodbEvent from "./Events/Mongodb";
 
 const server = express();
 
@@ -21,6 +23,7 @@ mongoose.connect(MongoDB_URI, {
 
 const db = mongoose.connection;
 
+MongodbEvent(db);
 Auth(passport);
 
 server.use(expressLayout);
@@ -59,6 +62,8 @@ server.use((req, res, next) => {
     res.locals.error = req.flash('error');
 
     res.locals.title = Web_Title;
+
+    res.locals.isAuth = req.isAuthenticated();
     
     res.setHeader('X-Powered-By', 'Tolfix');
 
