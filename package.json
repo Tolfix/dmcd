@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "./build/Server.js",
+    "start": "node ./build/Server.js",
     "setup": "npm run build && node ./build/Setup.js"
   },
   "repository": {
