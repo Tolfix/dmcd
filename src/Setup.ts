@@ -39,18 +39,18 @@ export interface ISetupPrompt
 
 export async function Setup()
 {
-    // if(process.getuid && process.getuid() === 0)
-    //     return log.error(`Not root user, or you are using windows`);
+    if(process.getuid && process.getuid() === 0)
+        return log.error(`Not root user, or you are using windows`);
 
-    // const [D_Yes, D_No] = await AW(ce("docker"));
+    const [D_Yes, D_No] = await AW(ce("docker"));
 
-    // if(D_No)
-    //     return log.error(`Unable to find docker, please be sure to install docker before running this!`);
+    if(D_No)
+        return log.error(`Unable to find docker, please be sure to install docker before running this!`);
 
-    // const [DC_Yes, DC_No] = await AW(ce("docker-compose"));
+    const [DC_Yes, DC_No] = await AW(ce("docker-compose"));
 
-    // if(DC_No)
-    //     return log.error(`Unable to find docker-compose, please be sure to install docker before running this!`);
+    if(DC_No)
+        return log.error(`Unable to find docker-compose, please be sure to install docker before running this!`);
 
     prompt.start();
 
