@@ -1,14 +1,22 @@
 <div class="container mt-3">
 
-    <a class="btn btn-warning" href="/cd/create">Create new CD</a>
+    <a class="btn btn-warning" data-toggle="modal" data-target="#createNewCD">Create new CD</a>
 
     <div class="mt-3">
         <!-- Loop through each here -->
         <!-- Show status on border, aka running etc -->
-        <div class="card border-warning mb-3">
+        <% cds.forEach((cd)=> {%>
+          <div class="card border-
+          <% if (cd.status === "active") { %>
+            success
+          <% } %> mb-3">
             <div class="row no-gutters">
               <div class="col-md-4 p-5">
-                <!-- These options can it be when stuff is happening on the cd.. -->
+                <% if (cd.status === "active") { %>
+                  <i class="fas fa-play" style="color: rgb(30, 212, 30)"></i>
+                  <p>Running..</p>
+                <% } %>
+                <!-- These options can it be when stuff is happening on the cd.. 
                 <i class="fas fa-pause" style="color: yellow"></i>
                 <p>Paused</p>
                 <i class="fas fa-play" style="color: green"></i>
@@ -17,18 +25,23 @@
                 <p>Stoped</p>
                 <i class="fas fa-wrench" style="color: steelblue"></i>
                 <p>Building</p>
+                -->
                 <!-- Show activity here? -->
               </div>
               <div class="col-md-8">
                 <div class="card-body">
-                  <h5 class="card-title">Title of CD</h5>
-                  <p class="card-text">Generel stuff?</p>
+                  <h5 class="card-title"><%= cd.name %></h5>
                   <a class="btn btn-block btn-warning" href="">Edit</a>
-                  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                  <a class="btn btn-block btn-danger" href="">Remove</a>
+                  <p class="card-text"><small class="text-muted">Webhook endpoint: <%= cd.webhookUrl %></small></p>
                 </div>
               </div>
             </div>
           </div>
+        <% }); %>
+
     </div>
 
 </div>
+
+<%- include("./Modals/Create-New-CD") %>
