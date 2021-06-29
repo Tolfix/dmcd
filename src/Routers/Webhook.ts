@@ -46,6 +46,8 @@ export default class WebhookRouter {
 
             DockerCompose(DockerDir+`/${CD.name}`);
 
+            log.info(`Recreating: ${CD.name}`);
+
             return res.sendStatus(200);
         });
 
