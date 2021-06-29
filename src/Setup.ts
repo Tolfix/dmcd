@@ -43,8 +43,8 @@ export interface ISetupPrompt
 
 export async function Setup()
 {
-    if(process.getuid && process.getuid() === 0)
-        return log.error(`Not root user, or you are using windows`);
+    // if(process.getuid && process.getuid() === 0)
+    //     return log.error(`Not root user, or you are using windows`);
 
     const [D_Yes, D_No] = await AW(ce("docker"));
 
