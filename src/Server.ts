@@ -16,6 +16,7 @@ import { Server } from "http"
 import SocketIo from "./Socket/Sockets";
 import ConfigRouter from "./Routers/Config";
 import CDRouter from "./Routers/CD";
+import WebhookRouter from "./Routers/Webhook";
 
 const server = express();
 const httpServer = new Server(server)
@@ -79,6 +80,7 @@ server.use((req, res, next) => {
 new MainRouter(server, io);
 new ConfigRouter(server, io);
 new CDRouter(server, io);
+new WebhookRouter(server, io)
     
 server.listen(PORT, () => log.info(`Server listing on http://localhost:${PORT}/`));
 
