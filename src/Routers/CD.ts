@@ -52,9 +52,6 @@ export default class CDRouter {
                     }
                 });
 
-            console.log(t_envs)
-            console.log(envs)
-
             let restartPolicy = req.body.restartPolicy ?? "always";
             
             const [webhookId, W_Error ] = await AW(GenString(20));
