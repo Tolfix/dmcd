@@ -24,27 +24,36 @@ export default class CDRouter {
             const { image, name } = req.body;
             let t_port = req.body.port;
             let t_envs = req.body.env;
-            if(typeof t_port === "string")
-                t_port = [t_port];
+            let envs;
+            let ports;
+
 
             if(typeof t_envs === "string")
                 t_envs = [t_envs];
 
-            const envs = (t_envs as Array<string>).map((t_value) => {
-                const splited = t_value.split("=");
-                return {
-                    value: splited[1],
-                    name: splited[0]
-                }
-            });
+            if(t_envs[0] !== "")
+                envs = (t_envs as Array<string>).map((t_value) => {
+                    const splited = t_value.split("=");
+                    return {
+                        value: splited[1],
+                        name: splited[0]
+                    }
+                });
 
-            const ports = (t_port as Array<string>).map((t_value) => {
-                const splited = t_value.split(":");
-                return {
-                    container: splited[1],
-                    host: splited[0]
-                }
-            });
+            if(typeof t_port === "string")
+                t_port = [t_port];
+
+            if(t_port[0] !== "")
+                ports = (t_port as Array<string>).map((t_value) => {
+                    const splited = t_value.split(":");
+                    return {
+                        container: splited[1],
+                        host: splited[0]
+                    }
+                });
+
+            console.log(t_envs)
+            console.log(envs)
 
             let restartPolicy = req.body.restartPolicy ?? "always";
             
