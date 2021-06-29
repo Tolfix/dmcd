@@ -32,7 +32,7 @@ export function CreateDockerCompose(options: ICD): string
             ${options.env ? stripIndent`environment:
 ${options.env.map((e) => `              - ${e.name}=${e.value}\n`).reduce((a,b) => `${a}${b}`)}` : ""}
             ${options.ports ? stripIndent`ports:
-${options.ports.map((e) => `              - ${e.host}=${e.container}\n`).reduce((a,b) => `${a}${b}`)}` : ""}
+${options.ports.map((e) => `              - "${e.host}:${e.container}"\n`).reduce((a,b) => `${a}${b}`)}` : ""}
             
     `;
 
