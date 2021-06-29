@@ -14,6 +14,8 @@ import MainRouter from "./Routers/Main";
 import MongodbEvent from "./Events/Mongodb";
 import { Server } from "http"
 import SocketIo from "./Socket/Sockets";
+import ConfigRouter from "./Routers/Config";
+import CDRouter from "./Routers/CD";
 
 const server = express();
 const httpServer = new Server(server)
@@ -75,5 +77,13 @@ server.use((req, res, next) => {
 });
 
 new MainRouter(server, io);
+new ConfigRouter(server, io);
+new CDRouter(server, io);
     
-server.listen(PORT, () => log.info(`Server listing on port: ${PORT}`, log.trace()));
+server.listen(PORT, () => log.info(`Server listing on http://localhost:${PORT}/`));
+
+if(process.platform === "win32")
+{
+    log.error(`Please run this in linux`);
+    process.exit(1);
+}
