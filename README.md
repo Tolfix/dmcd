@@ -25,3 +25,6 @@ Run `npm run start` and it will run as usual.
 ### PM2
 1. Install pm2: `npm i pm2 -g`
 2. Start by running: `pm2 start npm -- start`
+
+# Logging in
+Default user is `admin`, and password is the password you got prompted to type in `setup`
