@@ -2,6 +2,8 @@ import { Router, Application } from "express";
 import passport from "passport";
 import EnsureAuth from "../Middlewares/EnsureAuth";
 import { Server } from "socket.io";
+import AW from "../Lib/Async";
+import CDModel from "../Models/CD";
 
 export default class MainRouter {
     protected server: Application;
@@ -14,8 +16,11 @@ export default class MainRouter {
         this.router = Router();
         this.server.use("/", this.router);
 
-        this.router.get("/", EnsureAuth, (req, res) => {
-            res.render("Main");
+        this.router.get("/", EnsureAuth, async (req, res) => {
+            const [ CD, C_Error ] = await AW(CDModel.find());
+            res.render("Main", {
+                cds: CD
+            });
         });
 
         this.router.get("/login", (req, res) => {

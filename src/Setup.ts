@@ -132,10 +132,10 @@ export async function Setup()
                     new User({
                         username: "admin",
                         password: hash,
-                    }).save().then(a => {
+                    }).save().then(() => {
                         log.info("Admin user created for setup");
                         log.info('Setup complete!');
-                        process.exit(1);
+                        process.exit(0);
                     });
                 });
             });

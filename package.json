@@ -23,6 +23,7 @@
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "command-exists": "^1.2.9",
+    "common-tags": "^1.8.0",
     "connect-flash": "^0.1.1",
     "cors": "^2.8.5",
     "date-and-time": "^1.0.1",
@@ -41,6 +42,7 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/command-exists": "^1.2.0",
+    "@types/common-tags": "^1.8.0",
     "@types/connect-flash": "0.0.36",
     "@types/cors": "^2.8.10",
     "@types/date-and-time": "^0.13.0",
