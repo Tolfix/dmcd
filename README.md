@@ -19,9 +19,9 @@ then pulls it and recreats a new container ready for production.
 #  Running
 You can run it however you feel like, but the most effectiv way is using `pm2`
 
-## Normal
+### Normal
 Run `npm run start` and it will run as usual.
 
-## PM2
+### PM2
 1. Install pm2: `npm i pm2 -g`
 2. Start by running: `pm2 start npm -- start`
