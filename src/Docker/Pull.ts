@@ -11,7 +11,7 @@ export default function PullImage(image: string): Promise<Boolean>
                 resolve(false);
             }
 
-            if(stdout.includes("Downloaded newer image"))
+            if(stdout.includes("Downloaded newer image") || stdout.includes("Image is up to date"))
             {
                 resolve(true);
             }
