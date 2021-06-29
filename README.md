@@ -15,3 +15,13 @@ then pulls it and recreats a new container ready for production.
 4. Run: `npm run build`
 5. Follow setup by doing: `npm run setup`
 6. Once done run: `npm run start`
+
+#  Running
+You can run it however you feel like, but the most effectiv way is using `pm2`
+
+## Normal
+Run `npm run start` and it will run as usual.
+
+## PM2
+1. Install pm2: `npm i pm2 -g`
+2. Start by running: `pm2 start npm -- start`
