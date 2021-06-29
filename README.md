@@ -28,3 +28,8 @@ Run `npm run start` and it will run as usual.
 
 # Logging in
 Default user is `admin`, and password is the password you got prompted to type in `setup`
+
+# OS Support
+* Linux
+* ~~MacOS~~
+* ~~Windows~~
