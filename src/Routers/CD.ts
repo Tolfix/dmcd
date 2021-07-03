@@ -27,7 +27,6 @@ export default class CDRouter {
             let envs;
             let ports;
 
-
             if(typeof t_envs === "string")
                 t_envs = [t_envs];
 
@@ -63,23 +62,6 @@ export default class CDRouter {
                 return res.redirect("back");
             }
 
-            // Create new files for this
-            const [D, D_Error] = await AW(SetupDocker({
-                                            image: image,
-                                            name: name,
-                                            ports: ports,
-                                            env: envs,
-                                            restartPolicy: restartPolicy,
-                                            webhookUrl: ""
-                                        }))
-
-            if(D_Error)
-            {
-                log.error(D_Error)
-                req.flash("error", D_Error.toString());
-                return res.redirect("back");
-            }
-
             // TODO Check if image actually is real? 
 
             const [CD, C_Error] = await AW<ICD>(new CDModel(<ICD>{
@@ -96,6 +78,15 @@ export default class CDRouter {
                 req.flash("error", "Something went wrong, try again later");
                 return res.redirect("back");
             }
+
+            SetupDocker({
+                image: image,
+                name: name,
+                ports: ports,
+                env: envs,
+                restartPolicy: restartPolicy,
+                webhookUrl: ""
+            })
 
             req.flash("success", "Succesfully created a new CD");
             return res.redirect("back");
