@@ -7,6 +7,7 @@ export interface ICD
     env?: Array<ENV>;
     ports?: Array<PORTS>;
     webhookUrl: string;
+    status: string;
     restartPolicy: "always" | "never" | "on_failure" | "unless_stopped";
 }
 

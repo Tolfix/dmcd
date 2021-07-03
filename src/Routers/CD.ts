@@ -62,14 +62,14 @@ export default class CDRouter {
                 return res.redirect("back");
             }
 
-            // TODO Check if image actually is real? 
-
+            // TODO Check if image actually is real?
             const [CD, C_Error] = await AW<ICD>(new CDModel(<ICD>{
                                                 name: name,
                                                 env: envs,
                                                 ports: ports,
                                                 image: image,
-                                                webhookUrl: webhookId
+                                                webhookUrl: webhookId,
+                                                status: "building"
                                             }).save());
 
             if(!CD || C_Error)
@@ -85,8 +85,9 @@ export default class CDRouter {
                 ports: ports,
                 env: envs,
                 restartPolicy: restartPolicy,
-                webhookUrl: ""
-            })
+                webhookUrl: "",
+                status: ""
+            }, CD)
 
             req.flash("success", "Succesfully created a new CD");
             return res.redirect("back");

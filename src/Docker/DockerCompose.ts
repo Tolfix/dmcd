@@ -4,12 +4,21 @@ import docker from "docker-compose";
 import log from "../Lib/Logger";
 import AW from "../Lib/Async";
 
-export async function DockerCompose(dir: string): Promise<void>
+export function DockerCompose(dir: string): Promise<string>
 {
-    
-    const [DS, D_Error] = await AW(docker.upAll({
-        cwd: dir
-    }));
+    return new Promise(async (resolve, reject) => {
+        const [DS, D_Error] = await AW(docker.upAll({
+            cwd: dir
+        }));
+
+        if(D_Error)
+        {
+            log.error(`${DS?.err.trim()}`);
+            reject(`Unable to build docker`);
+        }
+
+        resolve(`Build and finished`);
+    });
 }
 
 export function CreateDockerCompose(options: ICD): string
