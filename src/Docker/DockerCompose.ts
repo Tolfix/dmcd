@@ -1,23 +1,15 @@
 import { stripIndent } from "common-tags"
 import { ICD } from "../Interfaces/CD";
+import docker from "docker-compose";
 import cp from "child_process";
 import log from "../Lib/Logger";
 
-export function DockerCompose(dir: string): void
+export function DockerCompose(dir: string, service: string = ""): void
 {
     
-    const ls = cp.spawn('docker-compose', ['up', '-d'], {
+    docker.upOne(service, {
         cwd: dir
     });
-
-    ls.stdout.on('data', (data) => {
-            log.info(data)
-    });
-
-    ls.stderr.on('data', (data) => {
-            log.error(data)
-    });
-
 }
 
 export function CreateDockerCompose(options: ICD): string
