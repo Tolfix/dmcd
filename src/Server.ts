@@ -8,7 +8,7 @@ import flash from "connect-flash"
 import cors from "cors";
 import methodOverride from "method-override";
 import log from "./Lib/Logger";
-import { PORT, Web_Title, MongoDB_URI, Domain, Session_Secret } from "./Config"
+import { PORT, Web_Title, MongoDB_URI, Domain, Session_Secret, DebugMode } from "./Config"
 import Auth from "./Passport/Auth";
 import MainRouter from "./Routers/Main";
 import MongodbEvent from "./Events/Mongodb";
@@ -86,7 +86,7 @@ new ConfigRouter(server, io);
 new CDRouter(server, io);
 new WebhookRouter(server, io);
     
-if(process.platform === "win32")
+if(process.platform === "win32" && !DebugMode)
 {
     log.error(`Please run this in linux`);
     process.exit(1);
