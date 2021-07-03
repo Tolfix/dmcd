@@ -9,11 +9,6 @@ import PullImage from "./Pull";
 export default function SetupDocker(options: ISetupDocker): Promise<string>
 {
     return new Promise(async (resolve, reject) => {
-        const [Image, I_Error] = await AW(PullImage(options.image));
-    
-        if(!Image)
-            return reject("Failed to pull image " + options.image);
-
         if (!fs.existsSync(DockerDir))
         {
             fs.mkdirSync(DockerDir);
@@ -30,6 +25,11 @@ export default function SetupDocker(options: ISetupDocker): Promise<string>
         }
     
         const [] = await AW(fs.appendFileSync(fileDir, file));
+
+        const [Image, I_Error] = await AW(PullImage(Dir));
+    
+        if(!Image)
+            return reject("Failed to pull image " + options.image);
 
         DockerCompose(Dir);
 

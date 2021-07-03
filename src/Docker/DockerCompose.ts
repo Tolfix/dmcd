@@ -1,15 +1,15 @@
 import { stripIndent } from "common-tags"
 import { ICD } from "../Interfaces/CD";
 import docker from "docker-compose";
-import cp from "child_process";
 import log from "../Lib/Logger";
+import AW from "../Lib/Async";
 
-export function DockerCompose(dir: string, service: string = ""): void
+export async function DockerCompose(dir: string): Promise<void>
 {
     
-    docker.upOne(service, {
+    const [DS, D_Error] = await AW(docker.upAll({
         cwd: dir
-    });
+    }));
 }
 
 export function CreateDockerCompose(options: ICD): string
