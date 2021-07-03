@@ -6,13 +6,13 @@
         <!-- Loop through each here -->
         <!-- Show status on border, aka running etc -->
         <% cds.forEach((cd)=> {%>
-          <div id="cd-<%= cd.name %>-card" class="card border-
+          <div id="cd-<%= cd.name %>-card" class="card
           <% if (cd.status === "active") { %>
-            success
+            border-success
           <% } else if (cd.status === "failed") { %>
-            danger
+            border-danger
           <% } else if (cd.status === "building") { %>
-            info
+            border-info
           <% } %>
           
           mb-3">
@@ -40,7 +40,7 @@
                 <div class="card-body">
                   <h5 class="card-title"><%= cd.name %></h5>
                   <a class="btn btn-block btn-warning" href="">Edit</a>
-                  <a class="btn btn-block btn-danger" href="">Remove</a>
+                  <button class="btn btn-block btn-danger" onclick="removeCD(`<%= cd.name %>`)">Remove</button>
                   <p class="card-text"><small class="text-muted">Webhook endpoint: <%= cd.webhookUrl %></small></p>
                 </div>
               </div>
@@ -58,6 +58,14 @@
             });
 
             socket.on(`cd-<%= cd.name %>-building`, () => {
+              document.querySelector("#cd-<%= cd.name %>-card").className = "card border-success mb-3";
+              document.querySelector("#cd-<%= cd.name %>-status").innerHTML = `
+              <i class="fas fa-play" style="color: rgb(30, 212, 30)"></i>
+              <p>Running..</p>
+              `;
+            });
+
+            socket.on(`cd-<%= cd.name %>-active`, () => {
               document.querySelector("#cd-<%= cd.name %>-card").className = "card border-info mb-3";
               document.querySelector("#cd-<%= cd.name %>-status").innerHTML = `
               <i class="fas fa-wrench" style="color: steelblue"></i>
@@ -72,5 +80,35 @@
     </div>
 
 </div>
+
+<!-- Modal for remove CD -->
+<div id="divRemoveModal"></div>
+<script>
+    function removeCD(CD_NAME) {
+      document.querySelector("#divRemoveModal").innerHTML = `
+      <div class="modal fade" id="removeCDModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">WARNING!!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to remove this CD ${CD_NAME}?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="/cd/remove/${CD_NAME}" type="button" class="btn btn-danger">Submit</a>
+              </div>
+          </div>
+        </div>
+      </div>`
+      $(document).ready(function(){
+          $("#removeCDModal").modal('show');
+      });
+    };
+</script>
 
 <%- include("./Modals/Create-New-CD") %>

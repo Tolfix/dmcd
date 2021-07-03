@@ -1,12 +1,15 @@
 import { Router, Application } from "express";
 import EnsureAuth from "../Middlewares/EnsureAuth";
 import { Server } from "socket.io";
+import fs from "fs";
 import { ENV, ICD, PORTS } from "../Interfaces/CD";
 import AW from "../Lib/Async";
 import { GenString } from "../Lib/Generator";
 import CDModel from "../Models/CD";
 import log from "../Lib/Logger";
 import SetupDocker from "../Docker/Setup";
+import { DockerDir } from "../Config";
+import DockerRemove from "../Docker/DockerDown";
 
 export default class CDRouter {
     protected server: Application;
@@ -90,6 +93,40 @@ export default class CDRouter {
             }, CD)
 
             req.flash("success", "Succesfully created a new CD");
+            return res.redirect("back");
+        });
+
+        this.router.get("/remove/:CD", async (req, res) => {
+            const CD = req.params.CD;
+
+            // Find if this CD really is real
+            const [CDM, C_Error] = await AW<ICD>(CDModel.findOne({ name: CD }));
+
+            if(C_Error || !CDM)
+            {
+                req.flash(`error`, `Unable to find this CD ${CD}`);
+                return res.redirect("back");
+            }
+
+            const dir = DockerDir+`/${CDM.name}`
+            // Check if dir cd is there
+            if(fs.existsSync(dir))
+            {
+                await DockerRemove(dir);
+
+                // Remove dir where CD is located at
+                fs.rmdir(DockerDir+`/${CDM.name}`, { recursive: true }, (err) => {
+                    if (err) {
+                        log.error(`Unable to delete dir, maybe it doesn't exists?`)
+                    }
+                
+                    log.info(`${CDM.name} was deleted from Docker/`);
+                });
+            }
+
+            // Delete from database
+            await CDModel.deleteOne({ name: CDM.name });
+
             return res.redirect("back");
         });
 
