@@ -5,8 +5,8 @@
 </p>
 
 # DMCD
-DMCD is being used to auto deploy apps, it uses `hub.docker.com` to know when there is a new image ready to pull,
-then pulls it and recreats a new container ready for production.
+DMCD is being used to auto deploy apps, it uses a webhook to know when there is a new image ready to pull,
+then pulls it and recreats a new container ready for production. This webhook can be used in [`hub.docker.com`](https://hub.docker.com/), or what suits the best.
 
 # Installation
 1. Install repo: `git clone https://github.com/Tolfix/dmcd.git`
