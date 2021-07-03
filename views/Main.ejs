@@ -6,25 +6,33 @@
         <!-- Loop through each here -->
         <!-- Show status on border, aka running etc -->
         <% cds.forEach((cd)=> {%>
-          <div class="card border-
+          <div id="cd-<%= cd.name %>-card" class="card border-
           <% if (cd.status === "active") { %>
             success
-          <% } %> mb-3">
+          <% } else if (cd.status === "failed") { %>
+            danger
+          <% } else if (cd.status === "building") { %>
+            info
+          <% } %>
+          
+          mb-3">
             <div class="row no-gutters">
               <div class="col-md-4 p-5">
-                <% if (cd.status === "active") { %>
-                  <i class="fas fa-play" style="color: rgb(30, 212, 30)"></i>
-                  <p>Running..</p>
-                <% } %>
+                <div id="cd-<%= cd.name %>-status">
+                  <% if (cd.status === "active") { %>
+                    <i class="fas fa-play" style="color: rgb(30, 212, 30)"></i>
+                    <p>Running..</p>
+                  <% } else if (cd.status === "failed") { %>
+                    <i class="fas fa-stop" style="color: red"></i>
+                    <p>Stopped</p>
+                  <% } else if (cd.status === "building") { %>
+                    <i class="fas fa-wrench" style="color: steelblue"></i>
+                    <p>Building</p>
+                  <% } %>
+                </div>
                 <!-- These options can it be when stuff is happening on the cd.. 
                 <i class="fas fa-pause" style="color: yellow"></i>
                 <p>Paused</p>
-                <i class="fas fa-play" style="color: green"></i>
-                <p>Running..</p>
-                <i class="fas fa-stop" style="color: red"></i>
-                <p>Stoped</p>
-                <i class="fas fa-wrench" style="color: steelblue"></i>
-                <p>Building</p>
                 -->
                 <!-- Show activity here? -->
               </div>
@@ -38,6 +46,27 @@
               </div>
             </div>
           </div>
+
+          <script>
+            
+            socket.on(`cd-<%= cd.name %>-fail`, (msg) => {
+              document.querySelector("#cd-<%= cd.name %>-card").className = "card border-danger mb-3";
+              document.querySelector("#cd-<%= cd.name %>-status").innerHTML = `
+              <i class="fas fa-stop" style="color: red"></i>
+              <p>Stopped</p>
+              `;
+            });
+
+            socket.on(`cd-<%= cd.name %>-building`, () => {
+              document.querySelector("#cd-<%= cd.name %>-card").className = "card border-info mb-3";
+              document.querySelector("#cd-<%= cd.name %>-status").innerHTML = `
+              <i class="fas fa-wrench" style="color: steelblue"></i>
+              <p>Building</p>
+              `;
+            });
+
+          </script>
+
         <% }); %>
 
     </div>
