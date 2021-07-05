@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "npm run build && node ./build/Server.js",
+    "nodemon": "nodemon ./build/Server",
     "setup": "npm run build && node ./build/Setup.js"
   },
   "repository": {
