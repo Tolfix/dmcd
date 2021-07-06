@@ -12,7 +12,6 @@ import { PORT, Web_Title, MongoDB_URI, Domain, Session_Secret, DebugMode } from 
 import Auth from "./Passport/Auth";
 import MainRouter from "./Routers/Main";
 import MongodbEvent from "./Events/Mongodb";
-import { Server } from "http"
 import SocketIo from "./Socket/Sockets";
 import ConfigRouter from "./Routers/Config";
 import CDRouter from "./Routers/CD";

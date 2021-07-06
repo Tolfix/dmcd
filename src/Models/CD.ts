@@ -21,6 +21,11 @@ const CDSchema = new Schema
             required: false
         },
 
+        ports: {
+            type: Array,
+            required: false
+        },
+
         restartPolicy: {
             type: String,
             default: "always"
