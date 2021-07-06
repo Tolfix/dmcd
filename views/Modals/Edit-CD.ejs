@@ -10,7 +10,7 @@
                 </button>
                 </div>
                 <div class="modal-body">
-                    <form action="/cd/edit/<%= cd.name %>" method="post">
+                    <form action="/cd/edit/<%= cd.name %>?_method=PUT" method="post">
                         <label for="image">Image</label>
                         <input class="form-control" type="text" name="image" value="<%= cd.image %>">
                         <label for="env" class="mt-3">Environment variables</label>
@@ -21,11 +21,11 @@
                                     <div id="rowR<%= index %><%= indexA %>" class="form-group form-inline mt-3">
                                         <div class="position-relative">
                                             <input name="env" class="form-control m-2" value="<%= env.name %>=<%= env.value %>">
-                                            <a type="button" id="envR<%= indexA %>" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">X</a>
+                                            <a type="button" id="envR<%= index %><%= indexA %>" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">X</a>
                                         </div>
                                     </div>
                                     <script>
-                                        let removeMe<%= index %><%= indexA %> = document.getElementById("envR<%= indexA %>");
+                                        let removeMe<%= index %><%= indexA %> = document.getElementById("envR<%= index %><%= indexA %>");
                                         removeMe<%= index %><%= indexA %>.addEventListener("click", () => {
                                             document.getElementById("rowR<%= index %><%= indexA %>").remove();
                                         })
@@ -37,16 +37,24 @@
                         <a id="addRow1<%= index %>" class="btn btn-success btn-block">Add new port</a>
                         <div id="appendRow1<%= index %>">
                             <% if (cd.ports) { %>                             
-                                <% cd.ports.forEach(port => { %>
-                                    <div id="port" class="form-group form-inline mt-3">
+                                <% cd.ports.forEach((port, indexA) => { %>
+                                    <div id="portR<%= index %><%= indexA %>" class="form-group form-inline mt-3">
                                         <div class="position-relative">
                                             <input name="port" class="form-control m-2" value="<%= port.host  %>:<%= port.container  %>">
-                                            <a type="button"  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">X</a>
+                                            <a type="button" id="PortR<%= index %><%= indexA %>" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">X</a>
                                         </div>
-                                    </div>                             
+                                    </div>      
+                                    
+                                    <script>
+                                        let removeMePort<%= index %><%= indexA %> = document.getElementById("PortR<%= index %><%= indexA %>");
+                                        removeMePort<%= index %><%= indexA %>.addEventListener("click", () => {
+                                            document.getElementById("portR<%= index %><%= indexA %>").remove();
+                                        })
+                                    </script>
                                 <% }) %>
                             <% } %>
                         </div>
+
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-success" type="submit">Submit</button>
