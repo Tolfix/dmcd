@@ -3,6 +3,7 @@ import { ICD } from "../Interfaces/CD";
 import docker from "docker-compose";
 import log from "../Lib/Logger";
 import AW from "../Lib/Async";
+import { ICreateDockerCompose } from "../Interfaces/Docker";
 
 export function DockerCompose(dir: string): Promise<string>
 {
@@ -21,7 +22,7 @@ export function DockerCompose(dir: string): Promise<string>
     });
 }
 
-export function CreateDockerCompose(options: ICD): string
+export function CreateDockerCompose(options: ICreateDockerCompose): string
 {
 
     let envs = stripIndent`
