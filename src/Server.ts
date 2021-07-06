@@ -8,19 +8,16 @@ import flash from "connect-flash"
 import cors from "cors";
 import methodOverride from "method-override";
 import log from "./Lib/Logger";
-import { PORT, Web_Title, MongoDB_URI, Domain, Session_Secret } from "./Config"
+import { PORT, Web_Title, MongoDB_URI, Domain, Session_Secret, DebugMode } from "./Config"
 import Auth from "./Passport/Auth";
 import MainRouter from "./Routers/Main";
 import MongodbEvent from "./Events/Mongodb";
-import { Server } from "http"
 import SocketIo from "./Socket/Sockets";
 import ConfigRouter from "./Routers/Config";
 import CDRouter from "./Routers/CD";
 import WebhookRouter from "./Routers/Webhook";
 
 const server = express();
-const httpServer = new Server(server)
-const io = (new SocketIo(httpServer)).io;
 
 mongoose.connect(MongoDB_URI, {
     useNewUrlParser: true,
@@ -35,6 +32,7 @@ Auth(passport);
 
 server.use(expressLayout);
 server.set('view engine', 'ejs');
+server.use(express.static('public'));
 
 server.use(cors({
     origin: true,
@@ -65,26 +63,30 @@ server.use(express.urlencoded({ extended: true }));
 
 server.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
+    res.locals.success = req.flash('success');
     res.locals.error_msg = req.flash('error_msg');
     res.locals.error = req.flash('error');
 
     res.locals.title = Web_Title;
 
     res.locals.isAuth = req.isAuthenticated();
+
+    res.locals.Port = PORT;
     
     res.setHeader('X-Powered-By', 'Tolfix');
 
     next();
 });
 
+const sv = server.listen(PORT, () => log.info(`Server listing on http://localhost:${PORT}/`));
+export const io = (new SocketIo(sv)).io;
+
 new MainRouter(server, io);
 new ConfigRouter(server, io);
 new CDRouter(server, io);
-new WebhookRouter(server, io)
+new WebhookRouter(server, io);
     
-server.listen(PORT, () => log.info(`Server listing on http://localhost:${PORT}/`));
-
-if(process.platform === "win32")
+if(process.platform === "win32" && !DebugMode)
 {
     log.error(`Please run this in linux`);
     process.exit(1);

@@ -6,6 +6,6 @@ export default function EnsureAuth(req: Request, res: Response, next: NextFuncti
         return next();
     }
 
-    req.flash("error_msg", "Please login");
+    req.flash("error", "Please login");
     return res.redirect("/login");
 }

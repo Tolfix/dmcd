@@ -1,5 +1,5 @@
 import { model, Schema, Document } from "mongoose"
-import { ICD } from "../Interfaces/CD";
+import { ICD, IDCD } from "../Interfaces/CD";
 
 const CDSchema = new Schema
 (
@@ -17,6 +17,11 @@ const CDSchema = new Schema
         },
 
         env: {
+            type: Array,
+            required: false
+        },
+
+        ports: {
             type: Array,
             required: false
         },
@@ -39,8 +44,6 @@ const CDSchema = new Schema
     }
 );
 
-interface b extends ICD, Document {};
-
-const CDModel = model<b>("cd", CDSchema);
+const CDModel = model<IDCD>("cd", CDSchema);
 
 export default CDModel;

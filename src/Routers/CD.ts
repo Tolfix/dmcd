@@ -1,12 +1,16 @@
 import { Router, Application } from "express";
 import EnsureAuth from "../Middlewares/EnsureAuth";
 import { Server } from "socket.io";
-import { ENV, ICD, PORTS } from "../Interfaces/CD";
+import fs from "fs";
+import { ENV, ICD, IDCD, PORTS } from "../Interfaces/CD";
 import AW from "../Lib/Async";
 import { GenString } from "../Lib/Generator";
 import CDModel from "../Models/CD";
 import log from "../Lib/Logger";
 import SetupDocker from "../Docker/Setup";
+import { DockerDir } from "../Config";
+import DockerRemove from "../Docker/DockerDown";
+import { CreateDockerCompose, DockerCompose } from "../Docker/DockerCompose";
 
 export default class CDRouter {
     protected server: Application;
@@ -62,14 +66,14 @@ export default class CDRouter {
                 return res.redirect("back");
             }
 
-            // TODO Check if image actually is real? 
-
+            // TODO Check if image actually is real?
             const [CD, C_Error] = await AW<ICD>(new CDModel(<ICD>{
                                                 name: name,
                                                 env: envs,
                                                 ports: ports,
                                                 image: image,
-                                                webhookUrl: webhookId
+                                                webhookUrl: webhookId,
+                                                status: "building"
                                             }).save());
 
             if(!CD || C_Error)
@@ -85,10 +89,152 @@ export default class CDRouter {
                 ports: ports,
                 env: envs,
                 restartPolicy: restartPolicy,
-                webhookUrl: ""
-            })
+                webhookUrl: "",
+                status: ""
+            }, CD)
 
             req.flash("success", "Succesfully created a new CD");
+            return res.redirect("back");
+        });
+
+        this.router.get("/remove/:CD", async (req, res) => {
+            const CD = req.params.CD;
+
+            // Find if this CD really is real
+            const [CDM, C_Error] = await AW<ICD>(CDModel.findOne({ name: CD }));
+
+            if(C_Error || !CDM)
+            {
+                req.flash(`error`, `Unable to find this CD ${CD}`);
+                return res.redirect("back");
+            }
+
+            const dir = DockerDir+`/${CDM.name}`
+            // Check if dir cd is there
+            if(fs.existsSync(dir))
+            {
+                await DockerRemove(dir);
+
+                // Remove dir where CD is located at
+                fs.rmdir(DockerDir+`/${CDM.name}`, { recursive: true }, (err) => {
+                    if (err) {
+                        log.error(`Unable to delete dir, maybe it doesn't exists?`)
+                    }
+                
+                    log.info(`${CDM.name} was deleted from Docker/`);
+                });
+            }
+
+            // Delete from database
+            await CDModel.deleteOne({ name: CDM.name });
+
+            return res.redirect("back");
+        });
+
+        this.router.put("/edit/:cd", async (req, res) => {
+            const CD = req.params.cd;
+
+            // Find if this CD really is real
+            const [CDM, C_Error] = await AW<IDCD>(CDModel.findOne({ name: CD }));
+
+            if(C_Error || !CDM)
+            {
+                req.flash(`error`, `Unable to find this CD ${CD}`);
+                return res.redirect("back");
+            }
+
+            const image = req.body.image;
+            let t_port = req.body.port;
+            let t_envs = req.body.env;
+            let envs;
+            let ports;
+
+            console.log(t_port)
+            console.log(t_envs)
+
+            if(typeof t_envs === "string")
+                t_envs = [t_envs];
+
+            if(t_envs && t_envs[0] !== "")
+                envs = (t_envs as Array<string>).map((t_value) => {
+                    const splited = t_value.split("=");
+                    return {
+                        value: splited[1],
+                        name: splited[0]
+                    }
+                });
+
+            if(typeof t_port === "string")
+                t_port = [t_port];
+
+            if(t_port && t_port[0] !== "")
+                ports = (t_port as Array<string>).map((t_value) => {
+                    const splited = t_value.split(":");
+                    return {
+                        container: splited[1],
+                        host: splited[0]
+                    }
+                });
+
+
+            if(image)
+            {
+                if(image !== CDM.image)
+                {
+                    CDM.image = image;
+                }
+            }
+
+            if(envs)
+            {
+                if(envs !== CDM.env)
+                {
+                    CDM.env = envs;
+                }
+            }
+
+
+            if(ports)
+            {
+                if(ports !== CDM.ports)
+                {
+                    CDM.ports = ports;
+                }
+            }
+
+            await CDM.save();
+
+            // Rebuild docker-compose file
+            // Aka remove it and create a new one..
+ 
+            const dir = DockerDir+`/${CDM.name}`
+            // Check if dir cd is there
+            if(fs.existsSync(dir))
+            {
+                fs.unlinkSync(DockerDir+`/${CDM.name}/docker-compose.yml`);
+                const file = CreateDockerCompose(
+                    {
+                        image: image,
+                        name: CDM.name,
+                        env: envs,
+                        ports: ports,
+                        restartPolicy: CDM.restartPolicy,
+                    }
+                )
+                const fileDir = DockerDir+`/${CDM.name}/docker-compose.yml`;
+                const Dir = DockerDir+`/${CDM.name}`;
+
+                fs.appendFileSync(fileDir, file);
+                
+                DockerCompose(Dir);
+            }
+            
+            // Not there? well shit
+            if(!fs.existsSync(dir))
+            {
+                log.error(`Unable to find DIR... ${dir}`);
+            }           
+
             return res.redirect("back");
         });
 
