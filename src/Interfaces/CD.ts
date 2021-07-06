@@ -1,5 +1,6 @@
 import { Document, model, Schema } from "mongoose"
 
+export interface IDCD extends ICD, Document {};
 export interface ICD
 {
     name: string;
