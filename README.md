@@ -8,6 +8,12 @@
 DMCD is being used to auto deploy apps, it uses a webhook to know when there is a new image ready to pull,
 then pulls it and recreats a new container ready for production. This webhook can be used in [`hub.docker.com`](https://hub.docker.com/), or what suits the best.
 
+# Requirements
+* A linux server.
+* A mongodb database.
+* Docker installed.
+* Docker-compose installed.
+
 # Installation
 1. Install repo: `git clone https://github.com/Tolfix/dmcd.git`
 2. Install typescript: `npm i typescript -g`
