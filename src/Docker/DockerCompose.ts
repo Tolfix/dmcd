@@ -4,8 +4,10 @@ import docker from "docker-compose";
 import log from "../Lib/Logger";
 import AW from "../Lib/Async";
 import { ICreateDockerCompose } from "../Interfaces/Docker";
+import SOCKET from "../Server";
+import { getCDSocketActive, getCDSocketFail } from "../Lib/CDSocket";
 
-export function DockerCompose(dir: string): Promise<string>
+export function DockerCompose(dir: string, cdName?: string): Promise<string>
 {
     return new Promise(async (resolve, reject) => {
         const [DS, D_Error] = await AW(docker.upAll({
@@ -14,11 +16,15 @@ export function DockerCompose(dir: string): Promise<string>
 
         if(D_Error)
         {
-            log.error(`${DS?.err.trim()}`);
-            reject(`Unable to build docker`);
+            if(cdName)
+                SOCKET.emit(getCDSocketFail(cdName), `Failed to build`);
+            log.error(`${DS}`);
+            return reject(`Unable to build docker`);
         }
 
-        resolve(`Build and finished`);
+        if(cdName)
+            SOCKET.emit(getCDSocketActive(cdName), `Recreation was a success`);
+        return resolve(`Build and finished`);
     });
 }
 
