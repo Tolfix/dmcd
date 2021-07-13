@@ -1,5 +1,8 @@
 <% if(success != ''){ %>
-    <div class="position-fixed top-0 right-0 p-3" style="z-index: 5; right: 0; top: 0;" >
+    <script>
+        Toast(`<%= success %>`, "success", `Success`);
+    </script>
+    <!-- <div class="position-fixed top-0 right-0 p-3" style="z-index: 5; right: 0; top: 0;" >
         <div class="border-success border-top" style="top: 0; right: 0;">
             <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
                 <div class="toast-header">
@@ -14,11 +17,14 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 <% } %> 
     
 <% if(error != ''){ %>
-    <div class="position-fixed top-0 right-0 p-3" style="z-index: 5; right: 0; top: 0;" >
+    <script>
+        Toast(`<%= error %>`, "danger", `Error`);
+    </script>
+    <!-- <div class="position-fixed top-0 right-0 p-3" style="z-index: 5; right: 0; top: 0;" >
         <div class="border-danger border-top" style="top: 0; right: 0;">
             <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
                 <div class="toast-header">
@@ -33,5 +39,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 <% } %>
