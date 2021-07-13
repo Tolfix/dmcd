@@ -6,7 +6,7 @@
         <!-- Loop through each here -->
         <!-- Show status on border, aka running etc -->
         <% cds.forEach((cd)=> {%>
-          <div id="cd-<%= cd.name %>-card" class="card
+          <div id="cd-<%= cd.name %>-card" class="position-relative card
           <% if (cd.status === "active") { %>
             border-success
           <% } else if (cd.status === "failed") { %>
@@ -16,7 +16,44 @@
           <% } %>
           
           mb-3">
-            <div class="row no-gutters">
+          <!-- For notifications on each emit for this CD -->
+          <a id="cd-<%= cd.name %>-emits" data-toggle="modal" data-target="#cd-<%= cd.name %>-logs" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning"><%= cd.logs.filter(e => !e.read).length %></a>
+          <div class="modal fade" id="cd-<%= cd.name %>-logs" data-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Logs for <%= cd.name %></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Message</th>
+                            <th scope="col">Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% cd.logs.slice().reverse().forEach((log, index) => { %>
+                            <tr>
+                              <th><%= index+1 %></th>
+                              <td><%= log.msg %></td> 
+                              <td><%= log.date.toLocaleString() %></td> 
+
+                            </tr>
+                          <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+            </div>
+          </div>  
+          
+          
+          <div class="row no-gutters">
               <div class="col-md-4 p-5">
                 <div id="cd-<%= cd.name %>-status">
                   <% if (cd.status === "active") { %>
@@ -71,6 +108,11 @@
               <i class="fas fa-wrench" style="color: steelblue"></i>
               <p>Building</p>
               `;
+            });
+
+            socket.on(`cd-<%= cd.name %>-logs`, (log) => {
+              document.querySelector(`#cd-<%= cd.name %>-emits`).innerHTML = parseInt(document.querySelector(`#cd-<%= cd.name %>-emits`).innerHTML)+1
+              Toast(log, "warning", `<%= cd.name %>`);
             });
 
           </script>

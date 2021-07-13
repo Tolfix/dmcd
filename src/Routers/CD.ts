@@ -11,6 +11,8 @@ import SetupDocker from "../Docker/Setup";
 import { DockerDir } from "../Config";
 import DockerRemove from "../Docker/DockerDown";
 import { CreateDockerCompose, DockerCompose } from "../Docker/DockerCompose";
+import SOCKET from "../Server";
+import { getCDSocketBuild, getCDSocketLogs } from "../Lib/CDSocket";
 
 export default class CDRouter {
     protected server: Application;
@@ -83,6 +85,8 @@ export default class CDRouter {
                 return res.redirect("back");
             }
 
+            // Fix this later me
+            // @Tolfx
             SetupDocker({
                 image: image,
                 name: name,
@@ -90,7 +94,12 @@ export default class CDRouter {
                 env: envs,
                 restartPolicy: restartPolicy,
                 webhookUrl: "",
-                status: ""
+                status: "",
+                logs: [{
+                    read: false,
+                    msg: "",
+                    date: new Date()
+                }]
             }, CD)
 
             req.flash("success", "Succesfully created a new CD");
@@ -127,7 +136,7 @@ export default class CDRouter {
 
             // Delete from database
             await CDModel.deleteOne({ name: CDM.name });
-
+            req.flash("success", `Removed ${CD}`);
             return res.redirect("back");
         });
 
@@ -148,9 +157,6 @@ export default class CDRouter {
             let t_envs = req.body.env;
             let envs;
             let ports;
-
-            console.log(t_port)
-            console.log(t_envs)
 
             if(typeof t_envs === "string")
                 t_envs = [t_envs];
@@ -226,7 +232,9 @@ export default class CDRouter {
 
                 fs.appendFileSync(fileDir, file);
                 
-                DockerCompose(Dir);
+                DockerCompose(Dir, CD);
+                log.info(`Recreating: ${CD}`);
+                SOCKET.emit(getCDSocketBuild(CD), `Recreating: ${CD}`);
             }
             
             // Not there? well shit
@@ -234,7 +242,8 @@ export default class CDRouter {
             {
                 log.error(`Unable to find DIR... ${dir}`);
             }           
-
+            log.info(`Succesfully edited ${CD}`);
+            SOCKET.emit(getCDSocketLogs(CD), `Succesfully edited ${CD}`)
             return res.redirect("back");
         });
 

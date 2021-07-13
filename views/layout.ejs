@@ -51,6 +51,10 @@
         <%- body %>
     </div>
 
+    <div aria-live="polite" aria-atomic="true" class="right-0" >
+      <div id="divLogs" class="toast-container position-absolute top-0 right-0 p-3" style="z-index: 5; right: 0; top: 0;"></div>
+    </div>
+    <script src="/Scripts/Toast.js"></script>
     <%- include("./Partials/Flash") %>
 
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>

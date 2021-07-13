@@ -41,6 +41,11 @@ const CDSchema = new Schema
             default: "active"
         },
 
+        logs: {
+            type: Array,
+            default: [],
+        },
+
     }
 );
 
