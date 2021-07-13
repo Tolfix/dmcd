@@ -16,6 +16,7 @@ import SocketIo from "./Socket/Sockets";
 import ConfigRouter from "./Routers/Config";
 import CDRouter from "./Routers/CD";
 import WebhookRouter from "./Routers/Webhook";
+import SocketHandler from "./Socket/SockerHandler";
 
 const server = express();
 
@@ -79,7 +80,7 @@ server.use((req, res, next) => {
 });
 
 const sv = server.listen(PORT, () => log.info(`Server listing on http://localhost:${PORT}/`));
-export const io = (new SocketIo(sv)).io;
+const io = (new SocketIo(sv)).io;
 
 new MainRouter(server, io);
 new ConfigRouter(server, io);
@@ -91,3 +92,6 @@ if(process.platform === "win32" && !DebugMode)
     log.error(`Please run this in linux`);
     process.exit(1);
 }
+
+const SOCKET = new SocketHandler(io, db);
+export default SOCKET
