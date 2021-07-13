@@ -1,4 +1,4 @@
-import { Document, model, Schema } from "mongoose"
+import { Document } from "mongoose"
 
 export interface IDCD extends ICD, Document {};
 export interface ICD
@@ -9,6 +9,7 @@ export interface ICD
     ports?: Array<PORTS>;
     webhookUrl: string;
     status: string;
+    logs: Array<ICDLog>;
     restartPolicy: "always" | "never" | "on_failure" | "unless_stopped";
 }
 
@@ -22,4 +23,11 @@ export interface PORTS
 {
     host: string;
     container: string;
+}
+
+export interface ICDLog
+{
+    read: Boolean;
+    msg: string;
+    date: Date;
 }
