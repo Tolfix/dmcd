@@ -5,8 +5,10 @@ import { DockerCompose } from "../Docker/DockerCompose";
 import PullImage from "../Docker/Pull";
 import { ICD } from "../Interfaces/CD";
 import AW from "../Lib/Async";
+import { getCDSocketBuild, getCDSocketFail, getCDSocketLogs } from "../Lib/CDSocket";
 import log from "../Lib/Logger";
 import CDModel from "../Models/CD";
+import SOCKET from "../Server";
 
 export default class WebhookRouter {
     protected server: Application;
@@ -36,17 +38,21 @@ export default class WebhookRouter {
                 return res.sendStatus(400);
             }
 
+            SOCKET.emit(getCDSocketLogs(CD.name), `New image ready.`);
+            
             const [Image, I_Error] = await AW(PullImage(CD.image));
-
+            
             if(!Image || I_Error)
             {
                 log.error(`Unable to pull image: ${CD.image}`);
+                SOCKET.emit(getCDSocketFail(CD.name), `Unable to pull image: ${CD.image}`);
                 return res.sendStatus(400);
             }
 
-            DockerCompose(DockerDir+`/${CD.name}`);
+            DockerCompose(DockerDir+`/${CD.name}`, CD.name);
 
             log.info(`Recreating: ${CD.name}`);
+            SOCKET.emit(getCDSocketBuild(CD.name), `Recreating: ${CD.name}`);
 
             return res.sendStatus(200);
         });
