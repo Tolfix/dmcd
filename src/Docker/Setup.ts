@@ -5,8 +5,8 @@ import { ISetupDocker } from "../Interfaces/SetupDocker";
 import { CreateDockerCompose, DockerCompose } from "./DockerCompose";
 import AW from "../Lib/Async";
 import PullImage from "./Pull";
-import { io } from "../Server";
-import { getCDSocketActive, getCDSocketBuild, getCDSocketFail } from "../Lib/CDSocket";
+import { getCDSocketActive, getCDSocketBuild, getCDSocketFail } from "../Lib/CDSocket";import SOCKET from "../Server";
+;
 
 export default function SetupDocker(options: ISetupDocker, mong: any): Promise<string>
 {
@@ -16,7 +16,7 @@ export default function SetupDocker(options: ISetupDocker, mong: any): Promise<s
             fs.mkdirSync(DockerDir);
         }
 
-        io.emit(getCDSocketBuild(options.name), `Building ${options.name}`)
+        SOCKET.emit(getCDSocketBuild(options.name), `Building ${options.name}`)
     
         // Create docker-compose.yml
         const file = CreateDockerCompose(options);
@@ -36,7 +36,7 @@ export default function SetupDocker(options: ISetupDocker, mong: any): Promise<s
         {
             mong.status = Failed;
             await mong.save();
-            io.emit(getCDSocketFail(options.name), `Failed to pull image`)
+            SOCKET.emit(getCDSocketFail(options.name), `Failed to pull image`)
             return reject("Failed to pull image " + options.image);
         }
 
@@ -46,13 +46,13 @@ export default function SetupDocker(options: ISetupDocker, mong: any): Promise<s
         {
             mong.status = Failed;
             await mong.save();
-            io.emit(getCDSocketFail(options.name), `Failed to build docker`)
+            SOCKET.emit(getCDSocketFail(options.name), `Failed to build docker`)
             return reject(`Failed to build ${options.name}`);
         }
 
         mong.status = Active;
         await mong.save();
-        io.emit(getCDSocketActive(options.name), `Docker built and finished`);
+        SOCKET.emit(getCDSocketActive(options.name), `Docker built and finished`);
         return resolve("Finished");
     });
 }
