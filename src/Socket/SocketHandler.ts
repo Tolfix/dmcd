@@ -53,7 +53,8 @@ export default class SocketHandler
                 
                 // Whoops lol
                 // this.emit(`cd-${CDName}-logs`, aMsg);    
-                this.io.emit(`cd-${CDName}-logs`, aMsg);    
+                if(CDStatus !== "logs")
+                    this.io.emit(`cd-${CDName}-logs`, aMsg);    
             }
             if(CDStatus !== "logs")
                 CD.status = CDStatus;

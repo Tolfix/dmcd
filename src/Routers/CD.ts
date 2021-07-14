@@ -13,6 +13,7 @@ import DockerRemove from "../Docker/DockerDown";
 import { CreateDockerCompose, DockerCompose } from "../Docker/DockerCompose";
 import SOCKET from "../Server";
 import { getCDSocketBuild, getCDSocketLogs } from "../Lib/CDSocket";
+import PullImage from "../Docker/Pull";
 
 export default class CDRouter {
     protected server: Application;
@@ -248,8 +249,48 @@ export default class CDRouter {
 
         this.router.get("/logs/:cd", async (req, res) => {
             const CD = req.params.cd;
-
             
+            
+        });
+        
+        this.router.post("/pull/:cd", async (req, res) => {
+            const CD = req.params.cd;
+    
+            const [CDM, C_Error] = await AW<IDCD>(CDModel.findOne({ name: CD }));
+
+            if(C_Error || !CDM)
+            {
+                req.flash(`error`, `Unable to find this CD ${CD}`);
+                return res.redirect("back");
+            }
+            
+            const dir = DockerDir+"/"+CDM.name;
+            
+            PullImage(dir, CDM.name)
+            
+            SOCKET.emit(getCDSocketLogs(CDM.name), `Pulling image..`);
+
+            return res.redirect("back");
+        });
+
+        this.router.post("/build/:cd", async (req, res) => {
+            const CD = req.params.cd;
+    
+            const [CDM, C_Error] = await AW<IDCD>(CDModel.findOne({ name: CD }));
+
+            if(C_Error || !CDM)
+            {
+                req.flash(`error`, `Unable to find this CD ${CD}`);
+                return res.redirect("back");
+            }
+            
+            const dir = DockerDir+"/"+CDM.name;
+            
+            DockerCompose(dir, CDM.name)
+            
+            SOCKET.emit(getCDSocketBuild(CDM.name), `Building container`);
+
+            return res.redirect("back");
         });
 
     }
