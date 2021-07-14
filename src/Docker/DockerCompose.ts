@@ -7,7 +7,7 @@ import { ICreateDockerCompose } from "../Interfaces/Docker";
 import SOCKET from "../Server";
 import { getCDSocketActive, getCDSocketFail } from "../Lib/CDSocket";
 
-export function DockerCompose(dir: string, cdName?: string): Promise<string>
+export function DockerCompose(dir: string, cdName?: string): Promise<Boolean>
 {
     return new Promise(async (resolve, reject) => {
         const [DS, D_Error] = await AW(docker.upAll({
@@ -19,12 +19,12 @@ export function DockerCompose(dir: string, cdName?: string): Promise<string>
             if(cdName)
                 SOCKET.emit(getCDSocketFail(cdName), `Failed to build`);
             log.error(`${DS}`);
-            return reject(`Unable to build docker`);
+            return resolve(false);
         }
 
         if(cdName)
             SOCKET.emit(getCDSocketActive(cdName), `Recreation was a success`);
-        return resolve(`Build and finished`);
+        return resolve(true);
     });
 }
 
