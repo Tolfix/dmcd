@@ -17,11 +17,9 @@ import { getCDSocketBuild, getCDSocketLogs } from "../Lib/CDSocket";
 export default class CDRouter {
     protected server: Application;
     protected router: Router;
-    protected io: Server;
 
-    constructor(server: Application, io: Server) {
+    constructor(server: Application) {
         this.server = server;
-        this.io = io;
         this.router = Router();
         this.server.use("/cd", EnsureAuth, this.router);
 

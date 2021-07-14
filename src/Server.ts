@@ -82,10 +82,10 @@ server.use((req, res, next) => {
 const sv = server.listen(PORT, () => log.info(`Server listing on http://localhost:${PORT}/`));
 const io = (new SocketIo(sv)).io;
 
-new MainRouter(server, io);
-new ConfigRouter(server, io);
-new CDRouter(server, io);
-new WebhookRouter(server, io);
+new MainRouter(server);
+new ConfigRouter(server);
+new CDRouter(server);
+new WebhookRouter(server);
     
 if(process.platform === "win32" && !DebugMode)
 {

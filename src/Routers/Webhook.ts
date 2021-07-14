@@ -13,11 +13,9 @@ import SOCKET from "../Server";
 export default class WebhookRouter {
     protected server: Application;
     protected router: Router;
-    protected io: Server;
 
-    constructor(server: Application, io: Server) {
+    constructor(server: Application) {
         this.server = server;
-        this.io = io;
         this.router = Router();
         this.server.use("/webhook", this.router);
 
