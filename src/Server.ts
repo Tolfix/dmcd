@@ -16,7 +16,7 @@ import SocketIo from "./Socket/Sockets";
 import ConfigRouter from "./Routers/Config";
 import CDRouter from "./Routers/CD";
 import WebhookRouter from "./Routers/Webhook";
-import SocketHandler from "./Socket/SockerHandler";
+import SocketHandler from "./Socket/SocketHandler";
 
 const server = express();
 
