@@ -2,9 +2,7 @@ import { Router, Application } from "express";
 import EnsureAuth from "../Middlewares/EnsureAuth";
 import bcrypt from "bcryptjs";
 import AW from "../Lib/Async";
-import ConfigModel from "../Models/Config";
 import UserModel from "../Models/User";
-import { IConfig } from "../Interfaces/Config";
 import log from "../Lib/Logger";
 export default class ConfigRouter {
     protected server: Application;

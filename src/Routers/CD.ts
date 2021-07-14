@@ -245,5 +245,11 @@ export default class CDRouter {
             return res.redirect("back");
         });
 
+        this.router.get("/logs/:cd", async (req, res) => {
+            const CD = req.params.cd;
+
+            
+        });
+
     }
 }
