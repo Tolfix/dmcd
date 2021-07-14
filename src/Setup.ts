@@ -27,6 +27,7 @@ import { GenString } from "./Lib/Generator";
 import User from "./Models/User";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
+import ConfigModel from "./Models/Config";
 
 export interface ISetupPrompt
 {
@@ -128,6 +129,11 @@ export async function Setup()
                 bcrypt.hash(password, salt, (err, hash) => {
                     if(err)
                         log.error(err, log.trace())
+
+                    new ConfigModel({
+                        setupDone: true,
+                        title: title
+                    }).save().then(() => {return;});
 
                     new User({
                         username: "admin",

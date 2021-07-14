@@ -9,9 +9,17 @@ const ConfigSchema = new Schema
             type: Boolean,
         },
 
+        title: {
+            type: String,
+        },
+
+        smtp: {
+            type: Object
+        },
+
     }
 );
 
-const ConfigModel = model<IConfig>("users", ConfigSchema);
+const ConfigModel = model<IConfig>("config", ConfigSchema);
 
 export default ConfigModel;
