@@ -97,7 +97,8 @@ export default class CDRouter {
                     read: false,
                     msg: "",
                     date: new Date()
-                }]
+                }],
+                email: false
             }, CD)
 
             req.flash("success", "Succesfully created a new CD");

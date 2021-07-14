@@ -10,6 +10,7 @@ export interface ICD
     webhookUrl: string;
     status: string;
     logs: Array<ICDLog>;
+    email: Boolean;
     restartPolicy: "always" | "never" | "on_failure" | "unless_stopped";
 }
 

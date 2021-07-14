@@ -52,5 +52,9 @@ export default class ConfigRouter {
             return res.redirect("back");
         });
 
+        this.router.post("edit/smtp", async (req, res) => {
+            
+        });
+
     }
 }
