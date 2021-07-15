@@ -53,7 +53,12 @@ const CDSchema = new Schema
 
         email_noti: {
             type: Object,
-            default: {}
+            default: {
+                onFail: false,
+                onActive: false,
+                onBuild: false,
+                onLog: false
+            }
         },
 
         email_reciever: {
