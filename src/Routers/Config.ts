@@ -4,6 +4,8 @@ import bcrypt from "bcryptjs";
 import AW from "../Lib/Async";
 import UserModel from "../Models/User";
 import log from "../Lib/Logger";
+import ConfigModel from "../Models/Config";
+import { IConfig } from "../Interfaces/Config";
 export default class ConfigRouter {
     protected server: Application;
     protected router: Router;
@@ -42,18 +44,52 @@ export default class ConfigRouter {
                         req.flash("error", `Something went wrong, try again later.`);
                         return res.redirect("back");        
                     }
-
+                    
                     user.password = hash;
-
+                    
                     user.save();
                 });
             });
-
+            
             return res.redirect("back");
         });
-
-        this.router.post("edit/smtp", async (req, res) => {
+        
+        this.router.post("/edit/smtp", async (req, res) => {
+            const { host, port, secure, username, password } = req.body;
             
+            const [Config, C_Error] = (await AW<IConfig[]>(ConfigModel.find()))
+            
+            if(!Config || C_Error)
+            {
+                req.flash("error", `Something went wrong, try again later.`);
+                return res.redirect("back");
+            }
+
+            let config = Config[0];
+            let smtp = config.smtp;
+
+            if(host !== smtp.host)
+                smtp.host = host;
+
+            if(port !== smtp.host)
+                smtp.host = port;
+
+            if(secure !== smtp.secure)
+                smtp.secure = secure;
+
+            if(username !== smtp.auth.user)
+                smtp.auth.user = username;
+
+            if(password !== smtp.auth.password)
+                smtp.auth.password = password
+
+
+            config.smtp = smtp;
+            config.markModified("smtp");
+            await config.save();
+            req.flash("success", `Succesfully modified SMTP settings`);
+            return res.redirect("back");
+        
         });
 
     }
