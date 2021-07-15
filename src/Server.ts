@@ -17,6 +17,7 @@ import ConfigRouter from "./Routers/Config";
 import CDRouter from "./Routers/CD";
 import WebhookRouter from "./Routers/Webhook";
 import SocketHandler from "./Socket/SocketHandler";
+import { GenString, GenStringBetter } from "./Lib/Generator";
 
 const server = express();
 
@@ -41,13 +42,13 @@ server.use(cors({
 }));
 
 let sessionMiddleWare = session({
-    secret: Session_Secret ?? "uhm yes, not so secret",
+    secret: Session_Secret ?? GenStringBetter(),
     resave: false,
     saveUninitialized: true,
     cookie: {
         path: "/",
         maxAge: 24*60*60*1000,
-        domain: Domain ?? '',
+        domain: Domain === "localhost" ? '' : Domain,
         // sameSite: is_prod ? 'strict' : false,
     }
 });
@@ -73,6 +74,8 @@ server.use((req, res, next) => {
     res.locals.isAuth = req.isAuthenticated();
 
     res.locals.Port = PORT;
+
+    res.locals.Domain = Domain;
     
     res.setHeader('X-Powered-By', 'Tolfix');
 
