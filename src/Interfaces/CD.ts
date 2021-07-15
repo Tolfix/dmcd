@@ -11,6 +11,8 @@ export interface ICD
     status: string;
     logs: Array<ICDLog>;
     email: Boolean;
+    email_noti: EmailNoti;
+    email_reciever: string;
     restartPolicy: "always" | "never" | "on_failure" | "unless_stopped";
 }
 
@@ -31,4 +33,12 @@ export interface ICDLog
     read: Boolean;
     msg: string;
     date: Date;
+}
+
+export interface EmailNoti
+{
+    onFail: Boolean;
+    onActive: Boolean;
+    onBuild: Boolean;
+    onLog: Boolean;
 }

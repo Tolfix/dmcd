@@ -51,6 +51,16 @@ const CDSchema = new Schema
             default: false
         },
 
+        email_noti: {
+            type: Object,
+            default: {}
+        },
+
+        email_reciever: {
+            type: String,
+            default: "dmcd@localhost"
+        },
+
     }
 );
 
