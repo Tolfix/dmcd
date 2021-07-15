@@ -27,11 +27,14 @@ import { GenString } from "./Lib/Generator";
 import User from "./Models/User";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
+import ConfigModel from "./Models/Config";
 
 export interface ISetupPrompt
 {
     password: string;
     title: string;
+    domain?: string;
+    ssl?: Boolean;
     mongodb_uri?: string;
     // mongodb_username?: string;
     // mongodb_admin?: string;
@@ -69,6 +72,16 @@ export async function Setup()
             description: "Title of this web app",
         },
         {
+            name: "domain",
+            description: "Got a domain? (example.com)",
+            default: "localhost"
+        },
+        {
+            name: "ssl",
+            description: "Got SSL on your domain?",
+            default: false
+        },
+        {
             name: "mongodb_uri",
             description: "Mongodb URL",
         }
@@ -104,16 +117,16 @@ export async function Setup()
 
         const info = result as unknown as ISetupPrompt
 
-        // const mongodb_url = `mongodb://${info.mongodb_username}:${info.mongodb_password}@${info.mongodb_ip}:${info.mongodb_port}/${info.mongodb_db}${info.mongodb_admin === "true" ? "?authSource=admin" : ""}`
-        const mongodb_url = info.mongodb_uri
+            const mongodb_url = info.mongodb_uri
 
-        // TODO Create an admin user with this password
         const password = info.password;
         const title = info.title;
+        const domain = info.domain;
+        const ssl = info.ssl;
 
         const [Session_Secret, E_Error] = await AW(GenString(53));
 
-        const all = `MONGODB_URI=${mongodb_url}\nTITLE=${title}\nSESSION_SECRET=${Session_Secret}`;
+        const all = `MONGODB_URI=${mongodb_url}\nTITLE=${title}\nSESSION_SECRET=${Session_Secret}\nDOMAIN=${domain}\nHTTP=${ssl ? "https" : "http"}`;
 
         fs.appendFile('.env', all, function (err) {
             if (err) throw err;
@@ -128,6 +141,11 @@ export async function Setup()
                 bcrypt.hash(password, salt, (err, hash) => {
                     if(err)
                         log.error(err, log.trace())
+
+                    new ConfigModel({
+                        setupDone: true,
+                        title: title
+                    }).save().then(() => {return;});
 
                     new User({
                         username: "admin",

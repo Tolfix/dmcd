@@ -16,7 +16,8 @@ import SocketIo from "./Socket/Sockets";
 import ConfigRouter from "./Routers/Config";
 import CDRouter from "./Routers/CD";
 import WebhookRouter from "./Routers/Webhook";
-import SocketHandler from "./Socket/SockerHandler";
+import SocketHandler from "./Socket/SocketHandler";
+import { GenString, GenStringBetter } from "./Lib/Generator";
 
 const server = express();
 
@@ -41,13 +42,13 @@ server.use(cors({
 }));
 
 let sessionMiddleWare = session({
-    secret: Session_Secret ?? "uhm yes, not so secret",
+    secret: Session_Secret ?? GenStringBetter(),
     resave: false,
     saveUninitialized: true,
     cookie: {
         path: "/",
         maxAge: 24*60*60*1000,
-        domain: Domain ?? '',
+        domain: Domain === "localhost" ? '' : Domain,
         // sameSite: is_prod ? 'strict' : false,
     }
 });
@@ -73,6 +74,8 @@ server.use((req, res, next) => {
     res.locals.isAuth = req.isAuthenticated();
 
     res.locals.Port = PORT;
+
+    res.locals.Domain = Domain;
     
     res.setHeader('X-Powered-By', 'Tolfix');
 
@@ -82,10 +85,10 @@ server.use((req, res, next) => {
 const sv = server.listen(PORT, () => log.info(`Server listing on http://localhost:${PORT}/`));
 const io = (new SocketIo(sv)).io;
 
-new MainRouter(server, io);
-new ConfigRouter(server, io);
-new CDRouter(server, io);
-new WebhookRouter(server, io);
+new MainRouter(server);
+new ConfigRouter(server);
+new CDRouter(server);
+new WebhookRouter(server);
     
 if(process.platform === "win32" && !DebugMode)
 {

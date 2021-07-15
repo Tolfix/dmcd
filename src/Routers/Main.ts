@@ -8,11 +8,9 @@ import CDModel from "../Models/CD";
 export default class MainRouter {
     protected server: Application;
     protected router: Router;
-    protected io: Server;
 
-    constructor(server: Application, io: Server) {
+    constructor(server: Application) {
         this.server = server;
-        this.io = io;
         this.router = Router();
         this.server.use("/", this.router);
 

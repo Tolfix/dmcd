@@ -9,7 +9,7 @@
           <div id="cd-<%= cd.name %>-card" class="position-relative card
           <% if (cd.status === "active") { %>
             border-success
-          <% } else if (cd.status === "failed") { %>
+          <% } else if (cd.status === "fail") { %>
             border-danger
           <% } else if (cd.status === "building") { %>
             border-info
@@ -59,7 +59,7 @@
                   <% if (cd.status === "active") { %>
                     <i class="fas fa-play" style="color: rgb(30, 212, 30)"></i>
                     <p>Running..</p>
-                  <% } else if (cd.status === "failed") { %>
+                  <% } else if (cd.status === "fail") { %>
                     <i class="fas fa-stop" style="color: red"></i>
                     <p>Stopped</p>
                   <% } else if (cd.status === "building") { %>
@@ -78,6 +78,8 @@
                   <h5 class="card-title"><%= cd.name %></h5>
                   <a class="btn btn-block btn-warning" data-toggle="modal" data-target="#CD-<%= cd.name %>">Edit</a>
                   <button class="btn btn-block btn-danger" onclick="removeCD(`<%= cd.name %>`)">Remove</button>
+                  <button class="btn btn-block btn-info" onclick="fetch(`/cd/build/<%= cd.name %>`, {method: 'POST'})">Build container</button>
+                  <button class="btn btn-block btn-success" onclick="fetch(`/cd/pull/<%= cd.name %>`, {method: 'POST'})">Pull image</button>
                   <p class="card-text"><small class="text-muted">Webhook endpoint: <%= cd.webhookUrl %></small></p>
                 </div>
               </div>
@@ -94,7 +96,7 @@
               `;
             });
 
-            socket.on(`cd-<%= cd.name %>-building`, () => {
+            socket.on(`cd-<%= cd.name %>-active`, () => {
               document.querySelector("#cd-<%= cd.name %>-card").className = "card border-success mb-3";
               document.querySelector("#cd-<%= cd.name %>-status").innerHTML = `
               <i class="fas fa-play" style="color: rgb(30, 212, 30)"></i>
@@ -102,7 +104,7 @@
               `;
             });
 
-            socket.on(`cd-<%= cd.name %>-active`, () => {
+            socket.on(`cd-<%= cd.name %>-building`, () => {
               document.querySelector("#cd-<%= cd.name %>-card").className = "card border-info mb-3";
               document.querySelector("#cd-<%= cd.name %>-status").innerHTML = `
               <i class="fas fa-wrench" style="color: steelblue"></i>

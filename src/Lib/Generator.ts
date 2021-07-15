@@ -12,3 +12,8 @@ export async function GenString(length: number = 10): Promise<string>
         });
     });
 }
+
+export function GenStringBetter(length: number = 10): string
+{
+    return crypto.randomBytes(length).toString("hex");
+}
