@@ -17,6 +17,10 @@ const ConfigSchema = new Schema
             type: Object
         },
 
+        domain: {
+            type: String,
+        },
+
     }
 );
 
