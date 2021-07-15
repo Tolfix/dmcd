@@ -86,20 +86,13 @@ export default class CDRouter {
 
             // Fix this later me
             // @Tolfx
+            // Fixed *phew*
             SetupDocker({
                 image: image,
                 name: name,
                 ports: ports,
                 env: envs,
                 restartPolicy: restartPolicy,
-                webhookUrl: "",
-                status: "",
-                logs: [{
-                    read: false,
-                    msg: "",
-                    date: new Date()
-                }],
-                email: false
             }, CD)
 
             req.flash("success", "Succesfully created a new CD");
