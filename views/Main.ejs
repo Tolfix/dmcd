@@ -77,7 +77,7 @@
                   <button class="btn btn-block btn-success" onclick="fetch(`/cd/pull/<%= cd.name %>`, {method: 'POST'})">Pull image</button>
                   <p class="card-text"><small class="text-muted">Webhook endpoint: <a href="<%= HTTP %>://<%= Domain %><%= Domain === "localhost" ? ":"+Port : "" %>/webhook/<%= cd.webhookUrl %>">
                     <%= HTTP %>://<%= Domain %><%= Domain === "localhost" ? ":"+Port : "" %>/webhook/<%= cd.webhookUrl %>
-                  </a></small></p>
+                  </a> <a title="New WebhookID" class="fas fa-sync text-decoration-none" onclick="newWebhook('<%= cd.name %>')"></a> </small></p>
                 </div>
               </div>
             </div>
@@ -150,6 +150,37 @@
           $("#removeCDModal").modal('show');
       });
     };
+</script>
+<div id="divnewWebhookId"></div>
+<script>
+  function newWebhook(cd)
+  {
+    document.querySelector("#divnewWebhookId").innerHTML = `
+      <div class="modal fade" id="newWebhookId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">WARNING!!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <form action="/cd/new/webhook/${cd}?_method=put" method="POST">
+                <div class="modal-body">
+                  Are you sure you want to generate a new webhook id for ${cd}?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-danger">Submit</button>
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>`
+      $(document).ready(function(){
+          $("#newWebhookId").modal('show');
+      });
+  }
 </script>
 
 <%- include("./Modals/Create-New-CD") %>
