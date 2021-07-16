@@ -4,7 +4,7 @@ import { Server } from "socket.io";
 import fs from "fs";
 import { ENV, ICD, IDCD, PORTS } from "../Interfaces/CD";
 import AW from "../Lib/Async";
-import { GenString } from "../Lib/Generator";
+import { GenString, GenStringBetter } from "../Lib/Generator";
 import CDModel from "../Models/CD";
 import log from "../Lib/Logger";
 import SetupDocker from "../Docker/Setup";
@@ -58,7 +58,7 @@ export default class CDRouter {
 
             let restartPolicy = req.body.restartPolicy ?? "always";
             
-            const [webhookId, W_Error ] = await AW(GenString(20));
+            const [webhookId, W_Error] = await AW(GenString(20));
 
             if(W_Error || !webhookId)
             {
@@ -283,6 +283,25 @@ export default class CDRouter {
             
             SOCKET.emit(getCDSocketBuild(CDM.name), `Building container`);
 
+            return res.redirect("back");
+        });
+
+        this.router.put("/new/webhook/:cd", async (req, res) => {
+            const CD = req.params.cd;
+    
+            const [CDM, C_Error] = await AW<IDCD>(CDModel.findOne({ name: CD }));
+
+            if(C_Error || !CDM)
+            {
+                req.flash(`error`, `Unable to find this CD ${CD}`);
+                return res.redirect("back");
+            }
+            
+            CDM.webhookUrl = GenStringBetter(20);
+            await CDM.save();
+            
+            SOCKET.emit(getCDSocketLogs(CDM.name), `Succesfully modified webhook id to "${CDM.webhookUrl}"`);
+            req.flash(`success`, `Succesfully modified webhook id to "${CDM.webhookUrl}"`);
             return res.redirect("back");
         });
 
