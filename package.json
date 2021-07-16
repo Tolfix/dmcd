@@ -4,8 +4,9 @@
   "description": "Dockerize My Continuous Deployment",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "npm run install && tsc",
     "start": "npm run build && node ./build/Server.js",
+    "install": "npm install",
     "start-nobuild": "node ./build/Server.js",
     "nodemon": "nodemon ./build/Server",
     "setup": "npm run build && node ./build/Setup.js"

@@ -49,7 +49,7 @@ let sessionMiddleWare = session({
         path: "/",
         maxAge: 24*60*60*1000,
         domain: Domain === "localhost" ? '' : Domain,
-        // sameSite: is_prod ? 'strict' : false,
+        sameSite: Domain === "localhost" ? false : 'strict',
     }
 });
 
