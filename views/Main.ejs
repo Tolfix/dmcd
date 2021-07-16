@@ -1,6 +1,7 @@
 <div class="container mt-3">
-
-    <a class="btn btn-warning" data-toggle="modal" data-target="#createNewCD">Create new CD</a>
+    <div class="d-grid gap-2">
+      <a class="btn btn-success" data-toggle="modal" data-target="#createNewCD">Create new CD</a>
+    </div>
 
     <div class="mt-3">
         <!-- Loop through each here -->
@@ -42,7 +43,6 @@
                               <th><%= index+1 %></th>
                               <td><%= log.msg %></td> 
                               <td><%= log.date.toLocaleString() %></td> 
-
                             </tr>
                           <% }) %>
                         </tbody>
@@ -50,8 +50,8 @@
                     </div>
                 </div>
             </div>
-          </div>  
-          
+          </div>
+          <!-- END | For notifications on each emit for this CD -->
           
           <div class="row no-gutters">
               <div class="col-md-4 p-5">
@@ -67,11 +67,6 @@
                     <p>Building</p>
                   <% } %>
                 </div>
-                <!-- These options can it be when stuff is happening on the cd.. 
-                <i class="fas fa-pause" style="color: yellow"></i>
-                <p>Paused</p>
-                -->
-                <!-- Show activity here? -->
               </div>
               <div class="col-md-8">
                 <div class="card-body">
@@ -80,7 +75,9 @@
                   <button class="btn btn-block btn-danger" onclick="removeCD(`<%= cd.name %>`)">Remove</button>
                   <button class="btn btn-block btn-info" onclick="fetch(`/cd/build/<%= cd.name %>`, {method: 'POST'})">Build container</button>
                   <button class="btn btn-block btn-success" onclick="fetch(`/cd/pull/<%= cd.name %>`, {method: 'POST'})">Pull image</button>
-                  <p class="card-text"><small class="text-muted">Webhook endpoint: <%= cd.webhookUrl %></small></p>
+                  <p class="card-text"><small class="text-muted">Webhook endpoint: <a href="<%= HTTP %>://<%= Domain %><%= Domain === "localhost" ? ":"+Port : "" %>/webhook/<%= cd.webhookUrl %>">
+                    <%= HTTP %>://<%= Domain %><%= Domain === "localhost" ? ":"+Port : "" %>/webhook/<%= cd.webhookUrl %>
+                  </a></small></p>
                 </div>
               </div>
             </div>

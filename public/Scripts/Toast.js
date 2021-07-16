@@ -7,7 +7,7 @@ function Toast(msg, status, title)
         <div class="toast-header">
             <img src="https://cdn.tolfix.com/images/TX-Small.png" width="28" class="rounded mr-2" alt="...">
             <strong class="mr-auto">${title}</strong>
-            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+            <button type="button" class="ml-2 mb-1 close" data-bs-dismiss="toast" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>

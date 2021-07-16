@@ -8,7 +8,7 @@ import flash from "connect-flash"
 import cors from "cors";
 import methodOverride from "method-override";
 import log from "./Lib/Logger";
-import { PORT, Web_Title, MongoDB_URI, Domain, Session_Secret, DebugMode } from "./Config"
+import { PORT, Web_Title, MongoDB_URI, Domain, Session_Secret, DebugMode, HTTPS } from "./Config"
 import Auth from "./Passport/Auth";
 import MainRouter from "./Routers/Main";
 import MongodbEvent from "./Events/Mongodb";
@@ -64,9 +64,7 @@ server.use(methodOverride('_method'));
 server.use(express.urlencoded({ extended: true }));
 
 server.use((req, res, next) => {
-    res.locals.success_msg = req.flash('success_msg');
     res.locals.success = req.flash('success');
-    res.locals.error_msg = req.flash('error_msg');
     res.locals.error = req.flash('error');
 
     res.locals.title = Web_Title;
@@ -76,6 +74,7 @@ server.use((req, res, next) => {
     res.locals.Port = PORT;
 
     res.locals.Domain = Domain;
+    res.locals.HTTP = HTTPS;
     
     res.setHeader('X-Powered-By', 'Tolfix');
 
