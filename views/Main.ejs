@@ -7,7 +7,7 @@
         <!-- Loop through each here -->
         <!-- Show status on border, aka running etc -->
         <% cds.forEach((cd)=> {%>
-          <div id="cd-<%= cd.name %>-card" class="position-relative card
+          <div id="cd-<%= cd.name %>-card" class="position-relative shadow card
           <% if (cd.status === "active") { %>
             border-success
           <% } else if (cd.status === "fail") { %>

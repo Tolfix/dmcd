@@ -81,7 +81,7 @@ server.use((req, res, next) => {
     next();
 });
 
-const sv = server.listen(PORT, () => log.info(`Server listing on http://localhost:${PORT}/`));
+const sv = server.listen(PORT, () => log.info(`Server listing on ${HTTPS}://${Domain}${Domain === "localhost" ? ":"+PORT : ""}/`));
 const io = (new SocketIo(sv)).io;
 
 new MainRouter(server);
