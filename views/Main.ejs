@@ -24,8 +24,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Logs for <%= cd.name %></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
                     </button>
                     </div>
                     <div class="modal-body">
@@ -132,15 +131,14 @@
           <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">WARNING!!</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
               </div>
               <div class="modal-body">
                 Are you sure you want to remove this CD ${CD_NAME}?
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <a href="/cd/remove/${CD_NAME}" type="button" class="btn btn-danger">Submit</a>
               </div>
           </div>
@@ -161,8 +159,7 @@
           <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">WARNING!!</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
               </div>
               <form action="/cd/new/webhook/${cd}?_method=put" method="POST">
@@ -170,7 +167,7 @@
                   Are you sure you want to generate a new webhook id for ${cd}?
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                   <button type="submit" class="btn btn-danger">Submit</button>
                 </div>
               </form>
