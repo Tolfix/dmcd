@@ -1,0 +1,74 @@
+<div class="container mt-4">
+    <div>
+        <div class="d-grid gap-2">
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#SMTPCollapse" aria-expanded="false" aria-controls="SMTPCollapse">
+                SMTP Settings
+            </button>
+        </div>
+        <div class="collapse mt-2 border border-3 border-warning p-3 rounded shadow" id="SMTPCollapse">
+            <form action="/config/edit/smtp" method="POST">
+                <div class="mb-3">
+                  <label for="host" class="form-label">Host</label>
+                  <input type="text" class="form-control" name="host" value="<%= configs.smtp.host %>" placeholder="example.com">
+                </div>
+                <div class="mb-3">
+                  <label for="port" class="form-label">Port</label>
+                  <input type="text" class="form-control" name="port" value="<%= configs.smtp.port %>" placeholder="25">
+                </div>
+                <div class="mb-3 form-check">
+                  <input type="checkbox" name="secure" class="form-check-input" <%= configs.smtp.secure ? "checked" : "" %>>
+                  <label class="form-check-label" for="">Secure? (TSL)</label>
+                </div>
+                <div class="mb-3 row">
+                    <div class="col">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" name="username" value="<%= configs.smtp.auth.user %>" placeholder="something@example.com">  
+                    </div>
+                    <div class="col">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="text" class="form-control" name="password" value="<%= configs.smtp.auth.password %>" placeholder="Password">  
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Change SMTP settings</button>
+                <button type="button" class="btn btn-warning" onClick="sendEmail()">Test email</button>
+              </form>
+        </div>
+    </div>
+    <div>
+
+    </div>
+</div>
+
+<!-- Modal for remove CD -->
+<div id="divSendEmail"></div>
+<script>
+    function sendEmail()
+    {
+        document.querySelector("#divSendEmail").innerHTML = `
+      <div class="modal fade" id="sendEmailDiv" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">WARNING!!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <form action="/config/smtp/test" method="POST">
+                <div class="modal-body">
+                    <label for="reciever">Reciever</label>
+                    <input class="form-control" name="reciever" placeholder="test@example.com">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>`
+      $(document).ready(function(){
+          $("#sendEmailDiv").modal('show');
+      });
+    }
+</script>

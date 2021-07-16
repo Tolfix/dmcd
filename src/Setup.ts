@@ -144,7 +144,17 @@ export async function Setup()
 
                     new ConfigModel({
                         setupDone: true,
-                        title: title
+                        title: title,
+                        smtp: {
+                            host: "",
+                            port: 25,
+                            secure: false,
+                            auth: {
+                                user: "",
+                                password: ""
+                            },
+                        },
+                        domain: "",
                     }).save().then(() => {return;});
 
                     new User({

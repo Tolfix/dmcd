@@ -6,6 +6,7 @@ import UserModel from "../Models/User";
 import log from "../Lib/Logger";
 import ConfigModel from "../Models/Config";
 import { IConfig } from "../Interfaces/Config";
+import { SendEmail } from "../Lib/Email";
 export default class ConfigRouter {
     protected server: Application;
     protected router: Router;
@@ -16,8 +17,11 @@ export default class ConfigRouter {
         this.router = Router();
         this.server.use("/config", EnsureAuth, this.router);
 
-        this.router.get("/", (req, res) => {
-            res.render("Config/Main");
+        this.router.get("/", async (req, res) => {
+            const Configs = await ConfigModel.find();
+            res.render("Config/Main", {
+                configs: Configs[0]
+            });
         });
 
         this.router.post("/edit/admin/password", async (req, res) => {
@@ -55,7 +59,7 @@ export default class ConfigRouter {
         });
         
         this.router.post("/edit/smtp", async (req, res) => {
-            const { host, port, secure, username, password } = req.body;
+            let { host, port, secure, username, password } = req.body;
             
             const [Config, C_Error] = (await AW<IConfig[]>(ConfigModel.find()))
             
@@ -70,12 +74,15 @@ export default class ConfigRouter {
 
             if(host !== smtp.host)
                 smtp.host = host;
+            
+            if(port !== smtp.port)
+                smtp.port = port;
+            
+            if(secure === "on" && !smtp.secure)
+                smtp.secure = true;
 
-            if(port !== smtp.host)
-                smtp.host = port;
-
-            if(secure !== smtp.secure)
-                smtp.secure = secure;
+            if(!secure && smtp.secure)
+                smtp.secure = false;
 
             if(username !== smtp.auth.user)
                 smtp.auth.user = username;
@@ -91,6 +98,27 @@ export default class ConfigRouter {
             return res.redirect("back");
         
         });
+
+        this.router.post("/smtp/test", async (req, res) => {
+            const reciever = req.body.reciever;
+            if(!reciever)
+                return res.redirect("back");
+
+            SendEmail(reciever, "Test Email", {
+                body: "This is a test email",
+                isHTML: false
+            }, (err, success) => {
+                if(err)
+                {
+                    log.error(err);
+                    req.flash(`error`, `Unable to send email, check settings!`);
+                    return res.redirect("back");
+                }
+
+                req.flash(`success`, `Succesfully sent email.`);
+                return res.redirect("back");
+            })
+        })
 
     }
 }
