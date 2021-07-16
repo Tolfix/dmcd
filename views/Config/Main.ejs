@@ -33,13 +33,31 @@
                 <button type="button" class="btn btn-warning" onClick="sendEmail()">Test email</button>
               </form>
         </div>
+
+        <div class="d-grid gap-2 mt-1">
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#ADMINCollapse" aria-expanded="false" aria-controls="ADMINCollapse">
+                Admin Settings
+            </button>
+        </div>
+        <div class="collapse mt-2 border border-3 border-warning p-3 rounded shadow" id="ADMINCollapse">
+
+        </div>
+
+        <div class="d-grid gap-2 mt-1">
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#GENERALCollapse" aria-expanded="false" aria-controls="GENERALCollapse">
+                General Settings
+            </button>
+        </div>
+        <div class="collapse mt-2 border border-3 border-warning p-3 rounded shadow" id="GENERALCollapse">
+
+        </div>
     </div>
     <div>
 
     </div>
 </div>
 
-<!-- Modal for remove CD -->
+<!-- Modal for sendEmail -->
 <div id="divSendEmail"></div>
 <script>
     function sendEmail()
