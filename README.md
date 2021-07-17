@@ -45,6 +45,9 @@ Run `npm run start` and it will run as usual.
 Default user is `admin`, and password is the password you got prompted to type in `setup`
 
 # 💾 | OS Support
-* Linux (Ubuntu, CentOs...)
-* ~~MacOS~~
-* ~~Windows~~
+| OS            | Supported     |
+| ------------- |:-------------:|
+| Ubuntu        | 🟢            |
+| CentOS        | ❌            |
+| Windows       | ❌            |
+| MacOS         | ❌            |
