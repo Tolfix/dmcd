@@ -19,17 +19,21 @@ Or simple ask on our [`discord server`](https://discord.com/invite/xHde7g93Yh).
 
 # ❗ | Requirements
 * A linux server.
-* A mongodb database.
-* Docker installed.
-* Docker-compose installed.
+* *A mongodb database*.
+* *Docker installed*.
+* *Docker-compose installed*.
 
 # 📝 | Installation
-1. Install repo: `git clone https://github.com/Tolfix/dmcd.git`
+You can simply run this command as `root` user. And it will automatically install everything you need.
+```bash
+curl -o install.sh https://raw.githubusercontent.com/Tolfix/dmcd/master/install.sh && bash install.sh
+```
+<!-- 1. Install repo: `git clone https://github.com/Tolfix/dmcd.git`
 2. Install typescript: `npm i typescript -g`
 3. Run: `npm install`
 4. Run: `npm run build`
 5. Follow setup by doing: `npm run setup`
-6. Once done run: `npm run start`
+6. Once done run: `npm run start` -->
 
 # ▶ | Running
 You can run it however you feel like, but the most effectiv way is using `pm2`
