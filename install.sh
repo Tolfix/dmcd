@@ -45,7 +45,7 @@ apt_update() {
 
 # Get the newest tag with the .zip file.
 get_newest_release_github() {
-
+    echo "* Getting the newest release"
 }
 
 # Get a .env file with the vars we got.
@@ -61,7 +61,6 @@ create_database() {
     apt_update
     apt install mongodb-org -y
     systemctl enable mongod
-    
 }
 
 main() {
