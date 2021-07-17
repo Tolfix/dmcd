@@ -27,15 +27,17 @@ SESSION_SECRET=""
 
 # User information
 USER_PASSWORD=""
+USER_EMAIL=""
 
 # Database
 MONGO_URI=""
 MONGO_ALREADY_HAS=false
 
 # Domain/SSL
-FQDN=""
+FQDN="localhost"
 IS_SSL=false
 CONFIGURE_SSL=false
+PROTOCOL=http
 
 # Update apt
 apt_update() {
@@ -68,7 +70,7 @@ build_dmcd() {
 # Get a .env file with the vars we got.
 create_env_file() {
     echo "* Creating .env file"
-    echo -e 'MONGODB_URI='$MONGO_URI'\nSESSION_SECRET='$SESSION_SECRET > .env
+    echo -e 'MONGODB_URI='$MONGO_URI'\nSESSION_SECRET='$SESSION_SECRET'\nDOMAIN='$FQDN'\nHTTP='$PROTOCOL > .env
     cat .env
     echo "* Done creating .env file"
 }
@@ -122,6 +124,29 @@ create_admin() {
     npm run create-admin $MONGO_URI $USER_PASSWORD
 }
 
+configure_nginx() {
+    # certbot
+    # nginx
+    apt install nginx -y
+    apt-get install certbot python3-certbot-nginx -y
+    ufw allow 'Nginx HTTP'
+    
+    rm -rf /etc/nginx/sites-enabled/default
+
+    curl -o /etc/nginx/sites-available/dmcd.conf https://raw.githubusercontent.com/Tolfix/dmcd/master/Templates/nginx.conf
+    
+    sed -i -e "s@<domain>@${FQDN}@g" /etc/nginx/sites-available/dmcd.conf
+
+    ln -sf /etc/nginx/sites-available/dmcd.conf /etc/nginx/sites-enabled/dmcd.conf
+
+    systemctl start nginx
+    systemctl enable nginx
+}
+
+configure_ssl() {
+    certbot --nginx --redirect --no-eff-email --email "$USER_EMAIL" -d "$FQDN" || FAILED_SSL=true
+}
+
 main() {
     # Check if already installed.
     if [ -d $INSTALL_PATH ]; then
@@ -140,35 +165,54 @@ main() {
     cd $INSTALL_PATH
 
     if [ "$GITHUB_IS_ACTION" = "action" ]; then
-        apt_update
+        # apt_update
         # create_database
-        install_node
-        gen_random_string
+        # install_node
+        # gen_random_string
         # install_docker
         # install_dmcd
         # npm_install
         # build_dmcd
-        create_env_file
+        # create_env_file
     else
         echo ""
         echo -n "* Admin password: "
         read -r USER_PASSWORD
 
         echo ""
+        echo -n "* Email: "
+        read -r USER_EMAIL
+
+        echo ""
+        echo -n "* FQDN (localhost): "
+        read -r FQDN
+
+        echo -e -n "* Do you want to configure SSL? (y/N): "
+        read -r CONFIRM_SSL
+
+        echo ""
         echo "* For this application to run properly it needs a mongodb database."
-        echo -n "* Do you already have a mongodb database? (true/false): "
+        echo -e -n "* Do you already have a mongodb database? (y/N): "
         read -r MONGO_ALREADY_HAS
 
-        if [ "$MONGO_ALREADY_HAS" = false ]; then
+        if [[ ! "$MONGO_ALREADY_HAS" =~ [Yy] ]]; then
             apt_update
             create_database
         else
             echo ""
-            echo "* Mongodb URI: "
+            echo -n "* Mongodb URI: "
             read -r MONGO_URI
         fi
 
         install_node
+        configure_nginx
+
+        if [[ "$CONFIRM_SSL" =~ [Yy] ]]; then
+            CONFIGURE_SSL=true
+            IS_SSL=true
+            configure_ssl
+        fi
+
         gen_random_string
         install_docker
         install_dmcd
