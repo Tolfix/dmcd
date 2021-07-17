@@ -50,7 +50,7 @@ get_newest_release_github() {
 
 # Get a .env file with the vars we got.
 create_env_file() {
-    printf -p 'MONGODB_URI=$MONGO_URI'
+    printf -p 'MONGODB_URI=$MONGO_URI' > .env
 }
 
 # Create a mongodb database
@@ -60,7 +60,9 @@ create_database() {
     echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.4.list
     apt_update
     apt install mongodb-org -y
+    systemctl start mongod
     systemctl enable mongod
+    MONGO_URI="mongodb://localhost/dmcd"
 }
 
 main() {
