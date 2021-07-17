@@ -8,7 +8,7 @@
 DMCD is being used to auto deploy apps, it uses a webhook to know when there is a new image ready to pull,
 then pulls it and recreats a new container ready for production. This webhook can be used in [`hub.docker.com`](https://hub.docker.com/), or what suits the best.
 
-# Status
+# 🧿 | Status
 [![Install script tester](https://github.com/Tolfix/dmcd/actions/workflows/test-install-script.yml/badge.svg)](https://github.com/Tolfix/dmcd/actions/workflows/test-install-script.yml) [![CodeQL](https://github.com/Tolfix/dmcd/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Tolfix/dmcd/actions/workflows/codeql-analysis.yml)
 
 # 📢 | Contribute
