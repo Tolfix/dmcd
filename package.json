@@ -9,6 +9,7 @@
     "install": "npm install",
     "start-nobuild": "node ./build/Server.js",
     "nodemon": "nodemon ./build/Server",
+    "create-admin": "node ./build/Setup/CreateAdmin",
     "setup": "npm run build && node ./build/Setup.js"
   },
   "repository": {

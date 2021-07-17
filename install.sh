@@ -118,6 +118,10 @@ install_docker() {
     echo "* Installed docker-compose"
 }
 
+create_admin() {
+    npm run create-admin $MONGO_URI $USER_PASSWORD
+}
+
 main() {
     # Check if already installed.
     if [ -d $INSTALL_PATH ]; then
@@ -150,16 +154,26 @@ main() {
 
         echo ""
         echo "* For this application to run properly it needs a mongodb database."
-        echo "* Do you already have a mongodb database? (true/false): "
+        echo -n "* Do you already have a mongodb database? (true/false): "
         read -r MONGO_ALREADY_HAS
 
         if [ "$MONGO_ALREADY_HAS" = false ]; then
+            apt_update
             create_database
         else
             echo ""
             echo "* Mongodb URI: "
             read -r MONGO_URI
         fi
+
+        install_node
+        gen_random_string
+        install_docker
+        install_dmcd
+        npm_install
+        build_dmcd
+        create_admin
+        create_env_file
 
     fi
 
