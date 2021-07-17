@@ -28,8 +28,6 @@ INSTALL_PATH="/var/dmcd"
 USER_PASSWORD=""
 
 # Database
-MONGO_USERNAME=""
-MONGO_PASSWORD=""
 MONGO_URI=""
 MONGO_ALREADY_HAS=false
 
@@ -50,7 +48,7 @@ get_newest_release_github() {
 
 # Get a .env file with the vars we got.
 create_env_file() {
-    printf -p 'MONGODB_URI=$MONGO_URI' > .env
+    echo 'MONGODB_URI=${MONGO_URI}' > .env
 }
 
 # Create a mongodb database
@@ -76,6 +74,8 @@ main() {
             exit 1
         fi
     fi
+
+    cd INSTALL_PATH
 
     if [ "$GITHUB_IS_ACTION" = "action" ]; then
         apt_update
