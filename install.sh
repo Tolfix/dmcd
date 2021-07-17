@@ -98,15 +98,7 @@ install_node() {
 }
 
 gen_random_string() {
-    # https://gist.github.com/earthgecko/3089509
-    # bash generate random 32 character alphanumeric string (upper and lowercase) and 
-    NEW_UUID=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-
-    # bash generate random number between 0 and 99
-    SESSION_SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-    if [ "$SESSION_SECRET" == "" ]; then
-        SESSION_SECRET=0
-    fi
+    SESSION_SECRET=$(node -e 'console.log(require("crypto").randomBytes(20).toString("hex"))')
 }
 
 install_docker() {
@@ -142,9 +134,9 @@ main() {
     cd $INSTALL_PATH
 
     if [ "$GITHUB_IS_ACTION" = "action" ]; then
-        # apt_update
+        apt_update
         # create_database
-        # install_node
+        install_node
         gen_random_string
         # install_docker
         # install_dmcd
