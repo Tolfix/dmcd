@@ -55,6 +55,10 @@ install_dmcd() {
     echo "* Installed the DMCD"
 }
 
+npm_install() {
+    npm install
+}
+
 build_dmcd() {
     echo "* Building DMCD"
     npm run build
@@ -150,6 +154,7 @@ main() {
         #gen_random_string
         # install_docker
         install_dmcd
+        npm_install
         build_dmcd
         create_env_file
     else
