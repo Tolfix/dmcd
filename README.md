@@ -28,6 +28,7 @@ You can simply run this command as `root` user. And it will automatically instal
 ```bash
 curl -o install.sh https://raw.githubusercontent.com/Tolfix/dmcd/master/install.sh && bash install.sh
 ```
+Once done it will be installed in `/var/dmcd`!
 <!-- 1. Install repo: `git clone https://github.com/Tolfix/dmcd.git`
 2. Install typescript: `npm i typescript -g`
 3. Run: `npm install`
