@@ -50,7 +50,7 @@ install_dmcd() {
         sed -E 's/.*"([^"]+)".*/\1/')
 
     curl -L -o master.tar.gz https://github.com/Tolfix/dmcd/archive/refs/tags/$TAG.tar.gz
-    tar xf master.tar.gz -C $INSTALL_PATH --strict-components 1
+    tar xf master.tar.gz -C $INSTALL_PATH --strip-components 1
     rm -r master.tar.gz
     echo "* Installed the DMCD"
 }
