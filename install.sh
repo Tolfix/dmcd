@@ -165,6 +165,7 @@ main() {
     cd $INSTALL_PATH
 
     if [ "$GITHUB_IS_ACTION" = "action" ]; then
+        echo "* Github action running now..."
         # apt_update
         # create_database
         # install_node
@@ -174,6 +175,7 @@ main() {
         # npm_install
         # build_dmcd
         # create_env_file
+        echo "* Github action stopped..."
     else
         echo ""
         echo -n "* Admin password: "
