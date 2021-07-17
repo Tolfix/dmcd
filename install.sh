@@ -67,7 +67,10 @@ build_dmcd() {
 
 # Get a .env file with the vars we got.
 create_env_file() {
-    echo 'MONGODB_URI=${MONGO_URI}\nSESSION_SECRET=${SESSION_SECRET}' > .env
+    echo "* Creating .env file"
+    echo -e 'MONGODB_URI='$MONGO_URI'\nSESSION_SECRET='$SESSION_SECRET > .env
+    cat .env
+    echo "* Done creating .env file"
 }
 
 # Create a mongodb database
@@ -99,17 +102,8 @@ gen_random_string() {
     # bash generate random 32 character alphanumeric string (upper and lowercase) and 
     NEW_UUID=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
-    # bash generate random 32 character alphanumeric string (lowercase only)
-    cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1
-
-    # Random numbers in a range, more randomly distributed than $RANDOM which is not
-    # very random in terms of distribution of numbers.
-
-    # bash generate random number between 0 and 9
-    cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 1
-
     # bash generate random number between 0 and 99
-    SESSION_SECRET=$(cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | sed -e 's/^0*//' | head --bytes 2)
+    SESSION_SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
     if [ "$SESSION_SECRET" == "" ]; then
         SESSION_SECRET=0
     fi
@@ -148,14 +142,14 @@ main() {
     cd $INSTALL_PATH
 
     if [ "$GITHUB_IS_ACTION" = "action" ]; then
-        apt_update
+        # apt_update
         # create_database
-        install_node
-        #gen_random_string
+        # install_node
+        gen_random_string
         # install_docker
-        install_dmcd
-        npm_install
-        build_dmcd
+        # install_dmcd
+        # npm_install
+        # build_dmcd
         create_env_file
     else
         echo ""
