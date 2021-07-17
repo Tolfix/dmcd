@@ -133,7 +133,7 @@ main() {
         apt_update
         create_database
         install_node
-        gen_random_string
+        #gen_random_string
         install_docker
         create_env_file
     else
