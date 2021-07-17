@@ -47,7 +47,7 @@ Default user is `admin`, and password is the password you got prompted to type i
 # 💾 | OS Support
 | OS            | Supported     |
 | ------------- |:-------------:|
-| Ubuntu        | 🟢            |
+| Ubuntu        |             |
 | CentOS        | ❌            |
 | Windows       | ❌            |
 | MacOS         | ❌            |
