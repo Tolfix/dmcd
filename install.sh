@@ -50,7 +50,7 @@ get_newest_release_github() {
 
 # Get a .env file with the vars we got.
 create_env_file() {
-
+    printf -p 'MONGODB_URI=$MONGO_URI'
 }
 
 # Create a mongodb database
@@ -81,7 +81,6 @@ main() {
         create_database
 
         create_env_file
-    
     else
         echo ""
         echo -n "* Admin password: "
