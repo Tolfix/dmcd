@@ -97,6 +97,9 @@ install_node() {
     echo "* Installing typescript"
     npm install typescript -g
     echo "* Installed typescript"
+    echo "* Installing pm2"
+    npm install pm2 -g
+    echo "* Installed pm2"
 }
 
 gen_random_string() {
