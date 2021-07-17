@@ -15,4 +15,4 @@ jobs:
           uses: actions/checkout@v2
 
         - name: Run install script
-          run: bash install.sh action
+          run: sudo bash install.sh action
