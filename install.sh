@@ -70,6 +70,10 @@ install_node() {
     curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
     apt -y install nodejs
     echo "* Nodejs installed"
+    echo ""
+    echo "* Installing typescript"
+    npm install typescript -g
+    echo "* Installed typescript"
 }
 
 gen_random_string() {
@@ -93,6 +97,23 @@ gen_random_string() {
     fi
 }
 
+install_docker() {
+    echo "* Installing docker"
+    apt install apt-transport-https ca-certificates curl software-properties-common -y
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+    apt_update
+    apt install docker-ce -y
+    systemctl start docker
+    systemctl enable docker
+    echo "* Installed docker"
+    echo ""
+    echo "* Install docker-compose"
+    curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+    echo "* Installed docker-compose"
+}
+
 main() {
     # Check if already installed.
     if [ -d $INSTALL_PATH ]; then
@@ -113,6 +134,7 @@ main() {
         create_database
         install_node
         gen_random_string
+        install_docker
         create_env_file
     else
         echo ""
