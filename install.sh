@@ -43,8 +43,22 @@ apt_update() {
 }
 
 # Get the newest tag with the .zip file.
-get_newest_release_github() {
+install_dmcd() {
     echo "* Getting the newest release"
+    TAG=$(curl --silent "https://api.github.com/repos/tolfix/dmcd/releases/latest" |
+        grep '"tag_name":' |
+        sed -E 's/.*"([^"]+)".*/\1/')
+
+    curl -L -o master.tar.gz https://github.com/Tolfix/dmcd/archive/refs/tags/$TAG.tar.gz
+    tar xf master.tar.gz -C $INSTALL_PATH --strict-components 1
+    rm -r master.tar.gz
+    echo "* Installed the DMCD"
+}
+
+build_dmcd() {
+    echo "* Building DMCD"
+    npm run build
+    echo "* Done building DMCD"
 }
 
 # Get a .env file with the vars we got.
@@ -131,10 +145,12 @@ main() {
 
     if [ "$GITHUB_IS_ACTION" = "action" ]; then
         apt_update
-        create_database
+        # create_database
         install_node
         #gen_random_string
-        install_docker
+        # install_docker
+        install_dmcd
+        build_dmcd
         create_env_file
     else
         echo ""
