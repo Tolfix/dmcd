@@ -129,12 +129,14 @@ main() {
         echo -e -n "* Are you sure you want to proceed? (y/N): "
         read -r CONFIRM_PROCEED
         if [[ ! "$CONFIRM_PROCEED" =~ [Yy] ]]; then
-            print_error "Installation aborted!"
+            echo "Installation aborted!"
             exit 1
         fi
     fi
 
-    mkdir $INSTALL_PATH
+    if [ ! -d $INSTALL_PATH ]; then
+        mkdir $INSTALL_PATH
+    fi
     cd $INSTALL_PATH
 
     if [ "$GITHUB_IS_ACTION" = "action" ]; then
