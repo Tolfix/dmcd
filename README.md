@@ -47,7 +47,7 @@ Run `npm run start` and it will run as usual.
 2. Start by running: `pm2 start npm -- start`
 
 # 🔐 | Logging in
-Default user is `admin`, and password is the password you got prompted to type in `setup`
+Default user is `admin`, and password is the password you got prompted to type in `setup` or by the `installation` script.
 
 # 💾 | OS Support
 | OS            | Supported     |
