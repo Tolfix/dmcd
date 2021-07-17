@@ -23,6 +23,7 @@ GITHUB_IS_ACTION=$1
 
 # General VARS
 INSTALL_PATH="/var/dmcd"
+SESSION_SECRET=""
 
 # User information
 USER_PASSWORD=""
@@ -48,7 +49,7 @@ get_newest_release_github() {
 
 # Get a .env file with the vars we got.
 create_env_file() {
-    echo 'MONGODB_URI=${MONGO_URI}' > .env
+    echo 'MONGODB_URI=${MONGO_URI}\nSESSION_SECRET=${SESSION_SECRET}' > .env
 }
 
 # Create a mongodb database
@@ -61,6 +62,35 @@ create_database() {
     systemctl start mongod
     systemctl enable mongod
     MONGO_URI="mongodb://localhost/dmcd"
+    echo "* Mongodb installed"
+}
+
+install_node() {
+    echo "* Installing nodejs"
+    curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
+    apt -y install nodejs
+    echo "* Nodejs installed"
+}
+
+gen_random_string() {
+    # https://gist.github.com/earthgecko/3089509
+    # bash generate random 32 character alphanumeric string (upper and lowercase) and 
+    NEW_UUID=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+
+    # bash generate random 32 character alphanumeric string (lowercase only)
+    cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1
+
+    # Random numbers in a range, more randomly distributed than $RANDOM which is not
+    # very random in terms of distribution of numbers.
+
+    # bash generate random number between 0 and 9
+    cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 1
+
+    # bash generate random number between 0 and 99
+    SESSION_SECRET=$(cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | sed -e 's/^0*//' | head --bytes 2)
+    if [ "$SESSION_SECRET" == "" ]; then
+        SESSION_SECRET=0
+    fi
 }
 
 main() {
@@ -81,7 +111,8 @@ main() {
     if [ "$GITHUB_IS_ACTION" = "action" ]; then
         apt_update
         create_database
-
+        install_node
+        gen_random_string
         create_env_file
     else
         echo ""
