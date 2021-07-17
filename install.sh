@@ -145,6 +145,10 @@ configure_nginx() {
 
 configure_ssl() {
     certbot --nginx --redirect --no-eff-email --email "$USER_EMAIL" -d "$FQDN" || FAILED_SSL=true
+
+    if [ "$FAILED_SSL" = false ]; then
+        PROTOCOL=https
+    fi
 }
 
 main() {
