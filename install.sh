@@ -75,7 +75,7 @@ main() {
         fi
     fi
 
-    cd INSTALL_PATH
+    cd $INSTALL_PATH
 
     if [ "$GITHUB_IS_ACTION" = "action" ]; then
         apt_update
