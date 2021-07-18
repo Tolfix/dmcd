@@ -38,11 +38,7 @@ export default class CDRouter {
 
             if(t_envs[0] !== "")
                 envs = (t_envs as Array<string>).map((t_value) => {
-                    const splited = t_value.split("=");
-                    return {
-                        value: splited[1],
-                        name: splited[0]
-                    }
+                    return env_seperator(t_value)
                 });
 
             if(typeof t_port === "string")
