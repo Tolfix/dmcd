@@ -14,6 +14,7 @@ import { CreateDockerCompose, DockerCompose } from "../Docker/DockerCompose";
 import SOCKET from "../Server";
 import { getCDSocketBuild, getCDSocketLogs } from "../Lib/CDSocket";
 import PullImage from "../Docker/Pull";
+import { env_seperator } from "../Lib/Seperator";
 
 export default class CDRouter {
     protected server: Application;
@@ -156,11 +157,7 @@ export default class CDRouter {
 
             if(t_envs && t_envs[0] !== "")
                 envs = (t_envs as Array<string>).map((t_value) => {
-                    const splited = t_value.split("=");
-                    return {
-                        value: splited[1],
-                        name: splited[0]
-                    }
+                    return env_seperator(t_value)
                 });
 
             if(typeof t_port === "string")
