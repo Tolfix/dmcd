@@ -3,7 +3,7 @@
 $theme-colors: (
   "primary": $theme_main_blue,
   "danger": $theme_main_red,
-  "info": $theme_main_purple,
+  "info": $theme_main_blue,
   "light": $theme_main_white,
   "warning": $theme_main_orange,
   "dark": $theme_main_dark,
@@ -16,4 +16,5 @@ $modal-content-bg: $theme_main_dark;
 $toast-header-background-color: $theme_main_dark;
 $toast-background-color: $theme_main_dark;
 $toast-color:$theme_main_white;
+$table-color: $theme_main_white;
 @import "../../node_modules/bootstrap/scss/bootstrap";
