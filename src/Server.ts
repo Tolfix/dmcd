@@ -38,7 +38,7 @@ server.set('view engine', 'ejs');
 server.use(express.static('public'));
 server.use(
     compileSass({
-        src: process.cwd()+"/sass", 
+        src: process.cwd()+"/Sass", 
         dest: process.cwd()+"/public",
         debug: DebugMode ? true : false,
         outputStyle: 'compressed'
