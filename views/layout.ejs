@@ -19,7 +19,7 @@
     <% } %>
     <script src="/Scripts/Main.js"></script>
     <script src="/Scripts/Bootstrap.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/Main.css">
+    <link rel="stylesheet" type=<%= Domain === "localhost" ? "text/css" : 'text/html' %> href="/css/Main.css">
     <title><%= title %></title>
 </head>
 <body>
