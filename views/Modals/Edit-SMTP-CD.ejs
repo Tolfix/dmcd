@@ -1,0 +1,47 @@
+<% cds.forEach(cd => { %>
+    <div class="modal fade" id="CD-SMTP-<%= cd.name %>" data-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Email notifications settings for <%= cd.name %></h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/cd/edit/smtp/<%= cd.name %>?_method=PUT" method="post">
+                        <div class="mb-3 form-check">
+                            <input <%= cd.email ? "checked" : "" %> class="form-check-input" type="checkbox" name="enableEmail" id="">
+                            <label class="form-check-label" for="">Activate email?</label>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input <%= cd.email_noti.onFail ? "checked" : "" %> class="form-check-input" type="checkbox" name="onFail" id="">
+                            <label class="form-check-label" for="">On fail?</label>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input <%= cd.email_noti.onActive ? "checked" : "" %> class="form-check-input" type="checkbox" name="onActive" id="">
+                            <label class="form-check-label" for="">On active?</label>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input <%= cd.email_noti.onBuild ? "checked" : "" %> class="form-check-input" type="checkbox" name="onBuild" id="">
+                            <label class="form-check-label" for="">On build?</label>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input <%= cd.email_noti.onLog ? "checked" : "" %> class="form-check-input" type="checkbox" name="onLog" id="">
+                            <label class="form-check-label" for="">On log?</label>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="">Reciever</label>
+                            <input class="form-control" type="text" name="email_reciever" value="<%= cd.email_reciever %>">
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<% }) %>
