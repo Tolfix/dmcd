@@ -35,6 +35,7 @@ Auth(passport);
 
 server.use(expressLayout);
 server.set('view engine', 'ejs');
+server.use(express.static('public'));
 server.use(
     compileSass({
         src: process.cwd()+"/sass", 
@@ -42,7 +43,6 @@ server.use(
         outputStyle: 'compressed'
     })
 );
-server.use(express.static('public'));
 
 server.use(cors({
     origin: true,
