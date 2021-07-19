@@ -54,16 +54,16 @@
           
           <div class="row no-gutters">
               <div class="col-md-4 p-5">
-                <div id="cd-<%= cd.name %>-status">
+                <div class="mt-4 ms-5  list-inline" id="cd-<%= cd.name %>-status">
                   <% if (cd.status === "active") { %>
-                    <i class="fas fa-play" style="color: rgb(30, 212, 30)"></i>
-                    <p>Running..</p>
+                    <i class="fas list-inline-item fa-4x fa-play theme-color-green"></i>
+                    <p class="list-inline-item mb-4">Running..</p>
                   <% } else if (cd.status === "fail") { %>
-                    <i class="fas fa-stop" style="color: red"></i>
-                    <p>Stopped</p>
+                    <i class="far list-inline-item fa-4x fa-stop-circle theme-color-red"></i>
+                    <h2 class="list-inline-item mb-4">Stopped</h2>
                   <% } else if (cd.status === "building") { %>
-                    <i class="fas fa-wrench" style="color: steelblue"></i>
-                    <p>Building</p>
+                    <i class="fas list-inline-item fa-4x fa-wrench theme-color-blue"></i>
+                    <p class="list-inline-item mb-4">Building</p>
                   <% } %>
                 </div>
               </div>
@@ -75,9 +75,20 @@
                   <button class="btn btn-block btn-info" onclick="fetch(`/cd/build/<%= cd.name %>`, {method: 'POST'})">Build container</button>
                   <button class="btn btn-block btn-success" onclick="fetch(`/cd/pull/<%= cd.name %>`, {method: 'POST'})">Pull image</button>
                   <button class="btn btn-block btn-warning" data-toggle="modal" data-target="#CD-SMTP-<%= cd.name %>">Email notifications</button>
-                  <p class="card-text"><small class="text-monospace">Webhook endpoint: <a href="<%= HTTP %>://<%= Domain %><%= Domain === "localhost" ? ":"+Port : "" %>/webhook/<%= cd.webhookUrl %>">
-                    <%= HTTP %>://<%= Domain %><%= Domain === "localhost" ? ":"+Port : "" %>/webhook/<%= cd.webhookUrl %>
-                  </a> <a title="New WebhookID" class="fas fa-sync text-decoration-none" onclick="newWebhook('<%= cd.name %>')"></a> </small></p>
+                  <p class="card-text">
+                    <h3 class="text-monospace">Webhook endpoint:
+                      <button 
+                        title="Click to copy"
+                        class="btn p-2 m-0 btn-info"
+                        data-bs-toggle="tooltip" 
+                        data-bs-placement="top"
+                        onClick="Copy('<%= HTTP %>://<%= Domain %><%= Domain === "localhost" ? ":"+Port : "" %>/webhook/<%= cd.webhookUrl %>')"
+                      >
+                        <%= HTTP %>://<%= Domain %><%= Domain === "localhost" ? ":"+Port : "" %>/webhook/<%= cd.webhookUrl %>
+                      </button> 
+                      <a title="New WebhookID" class="fas fa-sync text-decoration-none" onClick="newWebhook('<%= cd.name %>')"></a> 
+                    </h3>
+                  </p>
                 </div>
               </div>
             </div>
@@ -88,24 +99,24 @@
             socket.on(`cd-<%= cd.name %>-fail`, (msg) => {
               document.querySelector("#cd-<%= cd.name %>-card").className = "card border-danger mb-3";
               document.querySelector("#cd-<%= cd.name %>-status").innerHTML = `
-              <i class="fas fa-stop" style="color: red"></i>
-              <p>Stopped</p>
+              <i class="far list-inline-item fa-4x fa-stop-circle theme-color-red"></i>
+              <p class="list-inline-item mb-4">Stopped</p>
               `;
             });
 
             socket.on(`cd-<%= cd.name %>-active`, () => {
               document.querySelector("#cd-<%= cd.name %>-card").className = "card border-success mb-3";
               document.querySelector("#cd-<%= cd.name %>-status").innerHTML = `
-              <i class="fas fa-play" style="color: rgb(30, 212, 30)"></i>
-              <p>Running..</p>
+              <i class="fas list-inline-item fa-4x fa-play theme-color-green""></i>
+              <p class="list-inline-item mb-4">Running..</p>
               `;
             });
 
             socket.on(`cd-<%= cd.name %>-building`, () => {
               document.querySelector("#cd-<%= cd.name %>-card").className = "card border-info mb-3";
               document.querySelector("#cd-<%= cd.name %>-status").innerHTML = `
-              <i class="fas fa-wrench" style="color: steelblue"></i>
-              <p>Building</p>
+              <i class="fas list-inline-item fa-4x fa-wrench theme-color-blue"></i>
+              <p class="list-inline-item mb-4">Building</p>
               `;
             });
 
