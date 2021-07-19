@@ -39,22 +39,22 @@ export default class SocketHandler
         // Check if what type, and then see if that type is allowed to send an email for.
         const notis = cd.email_noti;
         if(status === "active" && notis.onActive)
-            return SendEmail(cd.email_reciever, `${cd.name} | ${status.toUpperCase()}`, {
+            SendEmail(cd.email_reciever, `${cd.name} | ${status.toUpperCase()}`, {
                 body: `${content.map((e) => `${e}\n`).reduce((a,b) => `${a}${b}`)}`,
                 isHTML: false
             });
         if(status === "building" && notis.onBuild)
-            return SendEmail(cd.email_reciever, `${cd.name} | ${status.toUpperCase()}`, {
+            SendEmail(cd.email_reciever, `${cd.name} | ${status.toUpperCase()}`, {
                 body: `${content.map((e) => `${e}\n`).reduce((a,b) => `${a}${b}`)}`,
                 isHTML: false
             });
         if(status === "fail" && notis.onFail)
-            return SendEmail(cd.email_reciever, `${cd.name} | ${status.toUpperCase()}`, {
+            SendEmail(cd.email_reciever, `${cd.name} | ${status.toUpperCase()}`, {
                 body: `${content.map((e) => `${e}\n`).reduce((a,b) => `${a}${b}`)}`,
                 isHTML: false
             });
         if(status === "log" && notis.onLog)
-            return SendEmail(cd.email_reciever, `${cd.name} | ${status.toUpperCase()}`, {
+            SendEmail(cd.email_reciever, `${cd.name} | ${status.toUpperCase()}`, {
                 body: `${content.map((e) => `${e}\n`).reduce((a,b) => `${a}${b}`)}`,
                 isHTML: false
             });
