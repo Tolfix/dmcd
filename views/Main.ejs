@@ -74,6 +74,7 @@
                   <button class="btn btn-block btn-danger" onclick="removeCD(`<%= cd.name %>`)">Remove</button>
                   <button class="btn btn-block btn-info" onclick="fetch(`/cd/build/<%= cd.name %>`, {method: 'POST'})">Build container</button>
                   <button class="btn btn-block btn-success" onclick="fetch(`/cd/pull/<%= cd.name %>`, {method: 'POST'})">Pull image</button>
+                  <button class="btn btn-block btn-warning" data-toggle="modal" data-target="#CD-SMTP-<%= cd.name %>">Email notifications</button>
                   <p class="card-text"><small class="text-monospace">Webhook endpoint: <a href="<%= HTTP %>://<%= Domain %><%= Domain === "localhost" ? ":"+Port : "" %>/webhook/<%= cd.webhookUrl %>">
                     <%= HTTP %>://<%= Domain %><%= Domain === "localhost" ? ":"+Port : "" %>/webhook/<%= cd.webhookUrl %>
                   </a> <a title="New WebhookID" class="fas fa-sync text-decoration-none" onclick="newWebhook('<%= cd.name %>')"></a> </small></p>
@@ -182,3 +183,4 @@
 
 <%- include("./Modals/Create-New-CD") %>
 <%- include("./Modals/Edit-CD") %>
+<%- include("./Modals/Edit-SMTP-CD") %>
