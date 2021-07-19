@@ -40,6 +40,7 @@ server.use(
     compileSass({
         src: process.cwd()+"/sass", 
         dest: process.cwd()+"/public",
+        debug: DebugMode ? true : false,
         outputStyle: 'compressed'
     })
 );
