@@ -298,5 +298,38 @@ export default class CDRouter {
             return res.redirect("back");
         });
 
+        this.router.put("/edit/smtp/:cd", async (req, res) => {
+            const CD = req.params.cd;
+
+            let { onFail, onBuild, onActive, onLog, email_reciever, enableEmail } = req.body;
+    
+            const [CDM, C_Error] = await AW<IDCD>(CDModel.findOne({ name: CD }));
+
+            if(C_Error || !CDM)
+            {
+                req.flash(`error`, `Unable to find this CD ${CD}`);
+                return res.redirect("back");
+            }
+            
+            const notis = CDM.email_noti;
+            
+            notis.onActive = onActive === "on" ? true : false;
+            notis.onBuild = onBuild === "on" ? true : false;
+            notis.onFail = onFail === "on" ? true : false;
+            notis.onLog = onLog === "on" ? true: false;
+
+            CDM.email = enableEmail === "on" ? true : false;
+
+            CDM.email_reciever = email_reciever;
+
+            CDM.email_noti = notis
+            CDM.markModified("email_noti");
+            CDM.markModified("email");
+            CDM.markModified("email_reciever");
+            await CDM.save()
+            req.flash("success", "Settings saved.");
+            return res.redirect("back");
+        });
+
     }
 }
