@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import session from "express-session";
 import flash from "connect-flash"
 import cors from "cors";
+import compileSass from "node-sass-middleware";
 import methodOverride from "method-override";
 import log from "./Lib/Logger";
 import { PORT, Web_Title, MongoDB_URI, Domain, Session_Secret, DebugMode, HTTPS } from "./Config"
@@ -34,6 +35,13 @@ Auth(passport);
 
 server.use(expressLayout);
 server.set('view engine', 'ejs');
+server.use(
+    compileSass({
+        src: process.cwd()+"/sass", 
+        dest: process.cwd()+"/public",
+        outputStyle: 'compressed'
+    })
+);
 server.use(express.static('public'));
 
 server.use(cors({

@@ -1,0 +1,7 @@
+@import "./Bootstrap.scss";
+@import "./ThemeColors.scss";
+
+body {
+    background-color: $theme_darker_dark;
+    color: $theme_main_white;
+}

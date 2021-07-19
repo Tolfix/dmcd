@@ -14,6 +14,7 @@ import { CreateDockerCompose, DockerCompose } from "../Docker/DockerCompose";
 import SOCKET from "../Server";
 import { getCDSocketBuild, getCDSocketLogs } from "../Lib/CDSocket";
 import PullImage from "../Docker/Pull";
+import { env_seperator } from "../Lib/Seperator";
 
 export default class CDRouter {
     protected server: Application;
@@ -37,11 +38,7 @@ export default class CDRouter {
 
             if(t_envs[0] !== "")
                 envs = (t_envs as Array<string>).map((t_value) => {
-                    const splited = t_value.split("=");
-                    return {
-                        value: splited[1],
-                        name: splited[0]
-                    }
+                    return env_seperator(t_value)
                 });
 
             if(typeof t_port === "string")
@@ -156,11 +153,7 @@ export default class CDRouter {
 
             if(t_envs && t_envs[0] !== "")
                 envs = (t_envs as Array<string>).map((t_value) => {
-                    const splited = t_value.split("=");
-                    return {
-                        value: splited[1],
-                        name: splited[0]
-                    }
+                    return env_seperator(t_value)
                 });
 
             if(typeof t_port === "string")
@@ -302,6 +295,39 @@ export default class CDRouter {
             
             SOCKET.emit(getCDSocketLogs(CDM.name), `Succesfully modified webhook id to "${CDM.webhookUrl}"`);
             req.flash(`success`, `Succesfully modified webhook id to "${CDM.webhookUrl}"`);
+            return res.redirect("back");
+        });
+
+        this.router.put("/edit/smtp/:cd", async (req, res) => {
+            const CD = req.params.cd;
+
+            let { onFail, onBuild, onActive, onLog, email_reciever, enableEmail } = req.body;
+    
+            const [CDM, C_Error] = await AW<IDCD>(CDModel.findOne({ name: CD }));
+
+            if(C_Error || !CDM)
+            {
+                req.flash(`error`, `Unable to find this CD ${CD}`);
+                return res.redirect("back");
+            }
+            
+            const notis = CDM.email_noti;
+            
+            notis.onActive = onActive === "on" ? true : false;
+            notis.onBuild = onBuild === "on" ? true : false;
+            notis.onFail = onFail === "on" ? true : false;
+            notis.onLog = onLog === "on" ? true: false;
+
+            CDM.email = enableEmail === "on" ? true : false;
+
+            CDM.email_reciever = email_reciever;
+
+            CDM.email_noti = notis
+            CDM.markModified("email_noti");
+            CDM.markModified("email");
+            CDM.markModified("email_reciever");
+            await CDM.save()
+            req.flash("success", "Settings saved.");
             return res.redirect("back");
         });
 
