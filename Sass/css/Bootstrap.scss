@@ -1,0 +1,19 @@
+@import "./ThemeColors.scss";  
+    
+$theme-colors: (
+  "primary": $theme_main_blue,
+  "danger": $theme_main_red,
+  "info": $theme_main_purple,
+  "light": $theme_main_white,
+  "warning": $theme_main_orange,
+  "dark": $theme_main_dark,
+  "success": $theme_main_green,
+);
+
+$card-bg: $theme_main_dark;
+$card-color: $theme_main_white;
+$modal-content-bg: $theme_main_dark;
+$toast-header-background-color: $theme_main_dark;
+$toast-background-color: $theme_main_dark;
+$toast-color:$theme_main_white;
+@import "../../node_modules/bootstrap/scss/bootstrap";
