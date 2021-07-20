@@ -43,7 +43,7 @@ export default class WebhookRouter {
             if(!Image || I_Error)
             {
                 log.error(`Unable to pull image: ${CD.image}`);
-                SOCKET.emit(getCDSocketFail(CD.name), `Unable to pull image: ${CD.image}`);
+                SOCKET.emit(getCDSocketLogs(CD.name), `Unable to pull image: ${CD.image}`);
                 return res.sendStatus(400);
             }
 
