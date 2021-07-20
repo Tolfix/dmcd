@@ -86,7 +86,13 @@
                       >
                         <%= HTTP %>://<%= Domain %><%= Domain === "localhost" ? ":"+Port : "" %>/webhook/<%= cd.webhookUrl %>
                       </button> 
-                      <a title="New WebhookID" class="fas fa-sync text-decoration-none" onClick="newWebhook('<%= cd.name %>')"></a> 
+                      <a 
+                        data-bs-toggle="tooltip" 
+                        data-bs-placement="right" 
+                        title="New webhook id" 
+                        class="fas fa-sync link-danger text-decoration-none"
+                        onClick="newWebhook('<%= cd.name %>')">
+                      </a> 
                     </h3>
                   </p>
                 </div>
