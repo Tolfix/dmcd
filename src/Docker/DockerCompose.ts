@@ -18,12 +18,14 @@ export function DockerCompose(dir: string, cdName?: string): Promise<Boolean>
         {
             if(cdName)
                 SOCKET.emit(getCDSocketFail(cdName), `Failed to build`);
-            log.error(`${DS}`);
+            log.error(`Failed to build`);
+            log.error(D_Error);
             return resolve(false);
         }
-
+        
         if(cdName)
             SOCKET.emit(getCDSocketActive(cdName), `Recreation was a success`);
+        log.verbos(`Succesfully built`);
         return resolve(true);
     });
 }
