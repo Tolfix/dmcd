@@ -21,6 +21,8 @@ export function DockerCompose(dir: string, cdName?: string): Promise<Boolean>
                 SOCKET.emit(getCDSocketFail(cdName), `Failed to build`);
             log.error(`Failed to build`);
             log.error(D_Error);
+            if(DebugMode)
+                console.log(D_Error);
             return resolve(false);
         }
         
