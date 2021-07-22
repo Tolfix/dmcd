@@ -9,7 +9,7 @@ import cors from "cors";
 import compileSass from "node-sass-middleware";
 import methodOverride from "method-override";
 import log from "./Lib/Logger";
-import { PORT, Web_Title, MongoDB_URI, Domain, Session_Secret, DebugMode, HTTPS } from "./Config"
+import { PORT, Web_Title, MongoDB_URI, Session_Secret, DebugMode, ConfigMap } from "./Config"
 import Auth from "./Passport/Auth";
 import MainRouter from "./Routers/Main";
 import MongodbEvent from "./Events/Mongodb";
@@ -18,7 +18,8 @@ import ConfigRouter from "./Routers/Config";
 import CDRouter from "./Routers/CD";
 import WebhookRouter from "./Routers/Webhook";
 import SocketHandler from "./Socket/SocketHandler";
-import { GenString, GenStringBetter } from "./Lib/Generator";
+import { GenStringBetter } from "./Lib/Generator";
+import reCache from "./Setup/reCache";
 
 const server = express();
 
@@ -57,8 +58,8 @@ let sessionMiddleWare = session({
     cookie: {
         path: "/",
         maxAge: 24*60*60*1000,
-        domain: Domain === "localhost" ? '' : Domain,
-        sameSite: Domain === "localhost" ? false : 'strict',
+        domain: ConfigMap.get("domain") === "localhost" ? '' : ConfigMap.get("domain"),
+        sameSite: ConfigMap.get("domain") === "localhost" ? false : 'strict',
     }
 });
 
@@ -82,15 +83,15 @@ server.use((req, res, next) => {
 
     res.locals.Port = PORT;
 
-    res.locals.Domain = Domain;
-    res.locals.HTTP = HTTPS;
+    res.locals.Domain = ConfigMap.get("domain");
+    res.locals.HTTP = ConfigMap.get("http");
     
     res.setHeader('X-Powered-By', 'Tolfix');
 
     next();
 });
 
-const sv = server.listen(PORT, () => log.info(`Server listing on ${HTTPS}://${Domain}${Domain === "localhost" ? ":"+PORT : ""}/`));
+const sv = server.listen(PORT, () => log.info(`Server listing on ${ConfigMap.get("http")}://${ConfigMap.get("domain")}${ConfigMap.get("domain") === "localhost" ? ":"+PORT : ""}/`));
 const io = (new SocketIo(sv)).io;
 
 new MainRouter(server);
@@ -103,6 +104,8 @@ if(process.platform === "win32" && !DebugMode)
     log.error(`Please run this in linux`);
     process.exit(1);
 }
+
+reCache();
 
 const SOCKET = new SocketHandler(io, db);
 export default SOCKET

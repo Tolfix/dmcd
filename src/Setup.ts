@@ -158,6 +158,7 @@ export async function Setup()
                             },
                         },
                         domain: "",
+                        ssl: false,
                     }).save().then(() => {return;});
 
                     new User({
