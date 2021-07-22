@@ -7,6 +7,7 @@ import log from "../Lib/Logger";
 import ConfigModel from "../Models/Config";
 import { IConfig } from "../Interfaces/Config";
 import { SendEmail } from "../Lib/Email";
+import { ConfigMap } from "../Config";
 export default class ConfigRouter {
     protected server: Application;
     protected router: Router;
@@ -118,7 +119,33 @@ export default class ConfigRouter {
                 req.flash(`success`, `Succesfully sent email.`);
                 return res.redirect("back");
             })
-        })
+        });
+
+        this.router.post("/edit/domain", async (req, res) => {
+            const { ssl, domain } = req.body;
+            
+            const [Config, C_Error] = await AW<IConfig[]>(ConfigModel.find());
+
+            if(!Config || C_Error)
+            {
+                if(C_Error)
+                    log.error(C_Error);
+
+                req.flash("error", `Something went wrong, try again later.`);
+                return res.redirect("back");                    
+            }
+
+            Config[0].domain = domain;
+            Config[0].ssl = ssl === "on" ? true : false;
+
+            ConfigMap.set("domain", domain);
+            ConfigMap.set("http", ssl === "on" ? "https" : "http");
+
+            await Config[0].save();
+
+            req.flash("success", "Succesfully changed domain settings, ensure to restart too.");
+            return res.redirect("back");
+        });
 
     }
 }
