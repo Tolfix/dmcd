@@ -38,12 +38,13 @@ export default class WebhookRouter {
 
             SOCKET.emit(getCDSocketLogs(CD.name), `New image ready.`);
             
-            const [Image, I_Error] = await AW(PullImage(CD.image));
+            const dir = DockerDir+"/"+CD.name;
+            const [Image, I_Error] = await AW(PullImage(dir, CD.name));
             
             if(!Image || I_Error)
             {
                 log.error(`Unable to pull image: ${CD.image}`);
-                SOCKET.emit(getCDSocketFail(CD.name), `Unable to pull image: ${CD.image}`);
+                SOCKET.emit(getCDSocketLogs(CD.name), `Unable to pull image: ${CD.image}`);
                 return res.sendStatus(400);
             }
 
