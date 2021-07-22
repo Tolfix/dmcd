@@ -1,4 +1,5 @@
 import { IConfig, ISMTP } from "./Interfaces/Config";
+import { IConfigMapIndex } from "./Interfaces/ConfigMap";
 import AW from "./Lib/Async";
 import ConfigModel from "./Models/Config";
 
@@ -24,6 +25,8 @@ export const GetSMTPConfig = () => {
         return resolve(c)
     })
 };
-export const Domain = process.env.DOMAIN ?? "localhost";
-export const HTTPS: "https" | "http" = process.env.HTTP as "https" ?? "http"
+export const ConfigMap = new Map<keyof IConfigMapIndex,  IConfigMapIndex[keyof IConfigMapIndex]>();
 export const DockerDir = ((__dirname.replace("\\build", "")).replace("/build", ""))+"/Docker";
+
+ConfigMap.set("domain", process.env.DOMAIN ?? "localhost")
+ConfigMap.set("http", process.env.HTTP as "https" ?? "http")

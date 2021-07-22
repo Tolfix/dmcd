@@ -42,8 +42,12 @@
         <div class="collapse mt-2 border border-3 border-warning p-3 rounded shadow" id="ADMINCollapse">
             <div>
                 <form action="/config/edit/admin/password" method="POST">
-                    <label for="password">New Admin Password</label>
-                    <input class="form-control mb-2" type="text" name="password" placeholder="Admin Password" required>
+
+                    <div class="mb-3">
+                        <label for="password">New Admin Password</label>
+                        <input class="form-control mb-2" type="text" name="password" placeholder="Admin Password" required>
+                    </div>
+
                     <button type="submit" class="btn btn-danger">Change password</button>
                 </form>
             </div>
@@ -55,7 +59,22 @@
             </button>
         </div>
         <div class="collapse mt-2 border border-3 border-warning p-3 rounded shadow" id="GENERALCollapse">
+            <div>
+                <form action="/config/edit/domain" method="POST">
 
+                    <div class="mb-3">
+                        <label for="password">Domain settings</label>
+                        <input class="form-control mb-2" type="text" name="domain" value="<%= Domain %>" placeholder="example.com" required>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="ssl" class="form-check-input" <%= configs.ssl ? "checked" : "" %>>
+                        <label class="form-check-label" for="">Secure? (https)</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-danger">Change Domain Settings</button>
+                </form>
+            </div>
         </div>
     </div>
     <div>

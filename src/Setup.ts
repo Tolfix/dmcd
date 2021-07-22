@@ -17,7 +17,7 @@
  * 5. Create a config file (aka .env file) with the information given.
  * 6. Print everything is done and ready to start.
  */
-
+require("dotenv").config();
 import log from "./Lib/Logger";
 import ce from "command-exists";
 import AW from "./Lib/Async";
@@ -28,6 +28,9 @@ import User from "./Models/User";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import ConfigModel from "./Models/Config";
+import { MongoDB_URI } from "./Config";
+
+let myArgs = process.argv.slice(2);
 
 export interface ISetupPrompt
 {
@@ -47,7 +50,7 @@ export interface ISetupPrompt
 export async function Setup()
 {
     // if(process.getuid && process.getuid() === 0)
-    //     return log.error(`Not root user, or you are using windows`);
+    //     return log.error(`Not root user, or you are using windows`)
 
     const [D_Yes, D_No] = await AW(ce("docker"));
 
@@ -155,6 +158,7 @@ export async function Setup()
                             },
                         },
                         domain: "",
+                        ssl: false,
                     }).save().then(() => {return;});
 
                     new User({
@@ -170,9 +174,49 @@ export async function Setup()
 
         });
     });
-};  
+};
+
+async function CreateSetupConfig()
+{
+    await mongoose.connect(MongoDB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+    });
+
+    const config = (await ConfigModel.find())[0];
+
+    if(config)
+    {
+        log.error(`A config has already been created`);
+        return process.exit(0)
+    }
+
+    await new ConfigModel({
+        setupDone: true,
+        title: "DMCD",
+        smtp: {
+            host: "",
+            port: 25,
+            secure: false,
+            auth: {
+                user: "",
+                password: ""
+            },
+        },
+        domain: "",
+    }).save();
+
+    log.verbos("Config created.");
+    return process.exit(0)
+}
 
 
 (async () => {
-    await Setup();
+    if(myArgs[0] === "create-setup")
+    {
+        return await CreateSetupConfig();
+    }
+
+    return await Setup();
 })();

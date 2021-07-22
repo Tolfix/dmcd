@@ -124,7 +124,7 @@ install_docker() {
 }
 
 create_admin() {
-    npm run create-admin $MONGO_URI $USER_PASSWORD
+    npm run create-admin $MONGO_URI $USER_PASSWORD $FQDN $IS_SSL
 }
 
 configure_nginx() {
@@ -149,7 +149,8 @@ configure_nginx() {
 configure_ssl() {
     certbot --nginx --redirect --no-eff-email --email "$USER_EMAIL" -d "$FQDN" || FAILED_SSL=true
 
-    if [ "$FAILED_SSL" = false ]; then
+    if [ "$FAILED_SSL" = "false" ]; then
+        IS_SSL=true
         PROTOCOL=https
     fi
 }
@@ -218,7 +219,6 @@ main() {
 
         if [[ "$CONFIRM_SSL" =~ [Yy] ]]; then
             CONFIGURE_SSL=true
-            IS_SSL=true
             configure_ssl
         fi
 

@@ -16,6 +16,7 @@ export default function PullImage(dir: string, cdName?: string): Promise<Boolean
             if(cdName)
                 SOCKET.emit(getCDSocketLogs(cdName), `Failed to pull image`);
             log.error(`Unable to pull image`);
+            log.error(I_Error);
             return resolve(false);
         }
 
