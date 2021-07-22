@@ -5,7 +5,8 @@ export interface IConfig extends Document
     setupDone: Boolean;
     title: String;
     smtp: ISMTP;
-    domain?: string;
+    domain: string;
+    ssl: Boolean;
 }
 
 export interface ISMTP
