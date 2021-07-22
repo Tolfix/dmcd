@@ -6,6 +6,7 @@ import AW from "../Lib/Async";
 import { ICreateDockerCompose } from "../Interfaces/Docker";
 import SOCKET from "../Server";
 import { getCDSocketActive, getCDSocketFail } from "../Lib/CDSocket";
+import { DebugMode } from "../Config";
 
 export function DockerCompose(dir: string, cdName?: string): Promise<Boolean>
 {
@@ -18,7 +19,9 @@ export function DockerCompose(dir: string, cdName?: string): Promise<Boolean>
         {
             if(cdName)
                 SOCKET.emit(getCDSocketFail(cdName), `Failed to build`);
-            log.error(`${DS}`);
+            log.error(D_Error);
+            if(DebugMode)
+                console.log(D_Error);
             return resolve(false);
         }
 
