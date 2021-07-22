@@ -26,7 +26,8 @@ bcrypt.genSalt(10, (err, salt) => {
                     password: ""
                 },
             },
-            domain: "",
+            domain: myArgs[2] ?? "",    
+            ssl: myArgs[3] === "true" ? true : false,
         }).save().then(() => {return;});
 
         new User({
