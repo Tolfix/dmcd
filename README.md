@@ -56,3 +56,6 @@ Default user is `admin`, and password is the password you got prompted to type i
 | CentOS        | ❌            |
 | Windows       | ❌            |
 | MacOS         | ❌            |
+
+# Discord
+[![Discord](https://discord.com/api/guilds/833438897484595230/widget.png?style=banner4)](https://discord.gg/xHde7g93Yh)
