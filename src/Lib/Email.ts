@@ -8,7 +8,7 @@ export async function SendEmail(
     subject: string, 
     body: IBodyEmail, 
     callback?: (error: Error|null, sent: Boolean|null) => void
-): Promise<void>
+): Promise<Boolean | void>
 {
     const [SMTPConfig, SMTP_Error] = await AW(GetSMTPConfig());
     if(!SMTPConfig || SMTP_Error)
@@ -43,8 +43,8 @@ export async function SendEmail(
     const transport = mail.createTransport(config);
 
     transport.sendMail(email).then(e => {
-        callback?.(null, true);
+        callback ? callback?.(null, true) : Promise.resolve(true);
     }).catch(e => {
-        callback?.(e, false);
+        callback ? callback?.(e, false) : Promise.resolve(false);
     });
 }
