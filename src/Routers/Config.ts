@@ -153,5 +153,42 @@ export default class ConfigRouter {
             return res.redirect("back");
         });
 
+        this.router.post("/edit/title", async (req, res) => {
+
+            const title = req.body.title;
+
+            if(!title)
+            {
+                req.flash("error", `Please include a title in the body`);
+                return res.redirect("back");   
+            }
+
+            const [Config, C_Error] = await AW<IConfig[]>(ConfigModel.find());
+
+            if(!Config || C_Error)
+            {
+                if(C_Error)
+                    log.error(C_Error);
+
+                req.flash("error", `Something went wrong, try again later.`);
+                return res.redirect("back");                    
+            };
+
+            let config = Config[0];
+
+            config.title = config.title === title ? config.title : title;
+
+            ConfigMap.set("title", title);
+
+            EditEnvFile({
+                TITLE: title
+            });
+
+            await config.save();
+
+            req.flash("success", "Succesfully changed domain settings, ensure to restart too.");
+            return res.redirect("back");
+        });
+
     }
 }

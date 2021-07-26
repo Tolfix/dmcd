@@ -75,6 +75,17 @@
                     <button type="submit" class="btn btn-danger">Change Domain Settings</button>
                 </form>
             </div>
+            <div>
+                <form action="/config/edit/title" method="POST">
+
+                    <div class="mb-3">
+                        <label for="password">Domain settings</label>
+                        <input class="form-control mb-2" type="text" name="title" value="<%= title %>" placeholder="DMCD" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-danger">Change Title</button>
+                </form>
+            </div>
         </div>
     </div>
     <div>
