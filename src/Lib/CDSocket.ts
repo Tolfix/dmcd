@@ -1,4 +1,4 @@
-import { Active, Building, Failed, Statues } from "../Types/Statues";
+import { Active, Building, Failed } from "../Types/Statues";
 
 //@ts-nocheck
 export function getCDSocketFail<Name extends string>(name: Name): `cd-${Name}-fail`
