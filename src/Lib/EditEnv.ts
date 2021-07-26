@@ -13,13 +13,12 @@ export function EditEnvFile(envOptions: Partial<IENV>)
 
     for(const env of envs)
     {
-        const { value, name } = env_seperator(env);
-        let n = name as keyof IENV
-        tempEnvOptions[n] = value;
+        const { value, name } = env_seperator<keyof IENV>(env);
+        tempEnvOptions[name] = value;
 
         // Replace data
-        if(envOptions[n] && envOptions[n] !== tempEnvOptions[n])
-            tempEnvOptions[n] = envOptions[n];
+        if(envOptions[name] && envOptions[name] !== tempEnvOptions[name])
+            tempEnvOptions[name] = envOptions[name];
     }
 
     let data = ``;
