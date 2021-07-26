@@ -8,6 +8,7 @@ import ConfigModel from "../Models/Config";
 import { IConfig } from "../Interfaces/Config";
 import { SendEmail } from "../Lib/Email";
 import { ConfigMap } from "../Config";
+import { EditEnvFile } from "../Lib/EditEnv";
 export default class ConfigRouter {
     protected server: Application;
     protected router: Router;
@@ -140,6 +141,11 @@ export default class ConfigRouter {
 
             ConfigMap.set("domain", domain);
             ConfigMap.set("http", ssl === "on" ? "https" : "http");
+
+            EditEnvFile({
+                DOMAIN: domain,
+                HTTP: ssl === "on" ? "https" : "http"
+            });
 
             await Config[0].save();
 

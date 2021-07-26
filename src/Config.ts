@@ -26,7 +26,8 @@ export const GetSMTPConfig = () => {
     })
 };
 export const ConfigMap = new Map<keyof IConfigMapIndex,  IConfigMapIndex[keyof IConfigMapIndex]>();
-export const DockerDir = ((__dirname.replace("\\build", "")).replace("/build", ""))+"/Docker";
+export const Dir = ((__dirname.replace("\\build", "")).replace("/build", ""));
+export const DockerDir = Dir+"/Docker";
 
 ConfigMap.set("domain", process.env.DOMAIN ?? "localhost")
 ConfigMap.set("http", process.env.HTTP as "https" ?? "http")
