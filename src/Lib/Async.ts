@@ -1,3 +1,4 @@
+// Promise<P> extends P ? P extends P ? any : Promise<P extends P ? P : any> : any
 export default async function 
     AW<P>(data: Promise<P> extends P ? P extends P ? any : Promise<P extends P ? P : any> : any)
         : Promise<[P | null, PromiseRejectedResult | null]>
@@ -7,6 +8,6 @@ export default async function
         return [await data, null];
     } catch (e)
     {
-        return [null, e];
+        return [null, e as PromiseRejectedResult];
     }
 }

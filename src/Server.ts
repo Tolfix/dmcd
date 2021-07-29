@@ -9,7 +9,7 @@ import cors from "cors";
 import compileSass from "node-sass-middleware";
 import methodOverride from "method-override";
 import log from "./Lib/Logger";
-import { PORT, Web_Title, MongoDB_URI, Session_Secret, DebugMode, ConfigMap } from "./Config"
+import { PORT, MongoDB_URI, Session_Secret, DebugMode, ConfigMap } from "./Config"
 import Auth from "./Passport/Auth";
 import MainRouter from "./Routers/Main";
 import MongodbEvent from "./Events/Mongodb";
@@ -77,7 +77,7 @@ server.use((req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
 
-    res.locals.title = Web_Title;
+    res.locals.title = ConfigMap.get("title");
 
     res.locals.isAuth = req.isAuthenticated();
 

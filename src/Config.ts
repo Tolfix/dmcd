@@ -1,3 +1,4 @@
+import { config } from "docker-compose";
 import { IConfig, ISMTP } from "./Interfaces/Config";
 import { IConfigMapIndex } from "./Interfaces/ConfigMap";
 import AW from "./Lib/Async";
@@ -5,7 +6,6 @@ import ConfigModel from "./Models/Config";
 
 export const DebugMode = process.env.DEBUG === "true" ? true : false;
 export const MongoDB_URI = process.env.MONGODB_URI ?? "mongodb://localhost/dmcd";
-export const Web_Title = process.env.TITLE ?? "DMCD"; 
 export const PORT = 56251;
 export const Session_Secret = process.env.SESSION_SECRET ?? undefined;
 export const GetSMTPConfig = () => {
@@ -26,7 +26,9 @@ export const GetSMTPConfig = () => {
     })
 };
 export const ConfigMap = new Map<keyof IConfigMapIndex,  IConfigMapIndex[keyof IConfigMapIndex]>();
-export const DockerDir = ((__dirname.replace("\\build", "")).replace("/build", ""))+"/Docker";
+export const Dir = ((__dirname.replace("\\build", "")).replace("/build", ""));
+export const DockerDir = Dir+"/Docker";
 
-ConfigMap.set("domain", process.env.DOMAIN ?? "localhost")
-ConfigMap.set("http", process.env.HTTP as "https" ?? "http")
+ConfigMap.set("title", process.env.TITLE ?? "DMCD");
+ConfigMap.set("domain", process.env.DOMAIN ?? "localhost");
+ConfigMap.set("http", process.env.HTTP as "https" ?? "http");
