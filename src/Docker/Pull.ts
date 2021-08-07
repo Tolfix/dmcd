@@ -4,6 +4,10 @@ import { getCDSocketLogs } from "../Lib/CDSocket";
 import log from "../Lib/Logger";
 import SOCKET from "../Server";
 
+/**
+ * @description
+ * Pulls a image from a CD 
+ */
 export default function PullImage(dir: string, cdName?: string): Promise<Boolean>
 {
     return new Promise(async (resolve, reject) => {
