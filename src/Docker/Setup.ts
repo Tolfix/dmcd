@@ -6,8 +6,11 @@ import { CreateDockerCompose, DockerCompose } from "./DockerCompose";
 import AW from "../Lib/Async";
 import PullImage from "./Pull";
 import { getCDSocketActive, getCDSocketBuild, getCDSocketFail } from "../Lib/CDSocket";import SOCKET from "../Server";
-;
 
+/**
+ * @description
+ * Setups a CD  
+ */
 export default function SetupDocker(options: ISetupDocker, mong: any): Promise<string>
 {
     return new Promise(async (resolve, reject) => {
