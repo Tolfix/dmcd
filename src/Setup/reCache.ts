@@ -4,6 +4,10 @@ import AW from "../Lib/Async";
 import log from "../Lib/Logger";
 import ConfigModel from "../Models/Config";
 
+/**
+ * @description
+ * Caches general stuff from our database.
+ */
 export default async function reCache()
 {
     const [Config, C_Error] = await AW<IConfig[]>(ConfigModel.find());
