@@ -1,3 +1,14 @@
+/**
+ * @description
+ * Seperates a .env value
+ * 
+ * ```
+ * ENV=VALUE => {
+ *  value: VALUE,
+ *  name: ENV
+ * }
+ * ```
+ */
 export function env_seperator
 <Key extends string = string, Value extends string = string>
 (env: string): { value: Value, name: Key }
