@@ -6,13 +6,15 @@ import { PassportStatic } from 'passport';
 // Load User model
 import User from '../Models/User';
 
-export default function Auth(passport: PassportStatic) {
+export default function Auth(passport: PassportStatic)
+{
     passport.use(
         new LocalStrategy({ usernameField: 'username' }, (username, password, done) => 
         {
             User.findOne({
                 username: username,
-            }).then((user) => {
+            }).then((user) =>
+            {
                 if (!user) {
                     return done(null, false, { message: 'That username is not registered' });
                 }
@@ -28,8 +30,8 @@ export default function Auth(passport: PassportStatic) {
                     return done(null, user);
                 });
             });
-    })
-);
+        })
+    );
 
     passport.serializeUser((user, done) => {
         //@ts-ignore

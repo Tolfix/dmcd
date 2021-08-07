@@ -1,11 +1,10 @@
 import { Router, Application } from "express";
-import { Server } from "socket.io";
 import { DockerDir } from "../Config";
 import { DockerCompose } from "../Docker/DockerCompose";
 import PullImage from "../Docker/Pull";
 import { ICD } from "../Interfaces/CD";
 import AW from "../Lib/Async";
-import { getCDSocketBuild, getCDSocketFail, getCDSocketLogs } from "../Lib/CDSocket";
+import { getCDSocketBuild, getCDSocketLogs } from "../Lib/CDSocket";
 import log from "../Lib/Logger";
 import CDModel from "../Models/CD";
 import SOCKET from "../Server";
