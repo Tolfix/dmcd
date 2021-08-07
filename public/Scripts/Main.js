@@ -16,3 +16,5 @@ function Copy(text)
 
     document.body.removeChild(textArea);
 }
+
+Notification.requestPermission();
