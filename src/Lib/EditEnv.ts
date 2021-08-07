@@ -3,6 +3,10 @@ import { Dir } from "../Config";
 import { IENV } from "../Interfaces/ENV";
 import { env_seperator } from "./Seperator";
 
+/**
+ * @description
+ * Edits the .env file on the machine.
+ */
 export function EditEnvFile(envOptions: Partial<IENV>)
 {
     // Get our file and parse through each.
