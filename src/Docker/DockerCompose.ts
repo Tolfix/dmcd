@@ -1,5 +1,4 @@
 import { stripIndent } from "common-tags"
-import { ICD } from "../Interfaces/CD";
 import docker from "docker-compose";
 import log from "../Lib/Logger";
 import AW from "../Lib/Async";
@@ -8,6 +7,10 @@ import SOCKET from "../Server";
 import { getCDSocketActive, getCDSocketFail } from "../Lib/CDSocket";
 import { DebugMode } from "../Config";
 
+/**
+ * @description
+ * ----> "docker-compose up -d" <---- 
+ */
 export function DockerCompose(dir: string, cdName?: string): Promise<Boolean>
 {
     return new Promise(async (resolve, reject) => {
@@ -33,6 +36,11 @@ export function DockerCompose(dir: string, cdName?: string): Promise<Boolean>
     });
 }
 
+/**
+ * 
+ * @description
+ * Gives a string formated for a `docker-compose.yml` file.
+ */
 export function CreateDockerCompose(options: ICreateDockerCompose): string
 {
 
