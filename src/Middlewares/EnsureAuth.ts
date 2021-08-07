@@ -1,5 +1,9 @@
 import { Request, Response, NextFunction } from "express"
 
+/**
+ * @description
+ * Ensures a user is auth.
+ */
 export default function EnsureAuth(req: Request, res: Response, next: NextFunction)
 {
     if (req.isAuthenticated()) {
