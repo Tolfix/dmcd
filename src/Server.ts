@@ -21,17 +21,38 @@ import SocketHandler from "./Socket/SocketHandler";
 import { GenStringBetter } from "./Lib/Generator";
 import reCache from "./Setup/reCache";
 
+/**
+ * @description
+ * The express server
+ */
 const server = express();
 
+/**
+ * @description
+ * Connecting to database
+ */
 mongoose.connect(MongoDB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
 });
 
+/**
+ * @description
+ * Mongoose client;
+ */
 const db = mongoose.connection;
 
+/**
+ * @description
+ * Load all mongoose events
+ */
 MongodbEvent(db);
+
+/**
+ * @description
+ * Passport local auth
+ */
 Auth(passport);
 
 server.use(expressLayout);
@@ -94,6 +115,9 @@ server.use((req, res, next) => {
 const sv = server.listen(PORT, () => log.info(`Server listing on ${ConfigMap.get("http")}://${ConfigMap.get("domain")}${ConfigMap.get("domain") === "localhost" ? ":"+PORT : ""}/`));
 const io = (new SocketIo(sv)).io;
 
+/*
+ * All of the routes gets loaded here 
+ */
 new MainRouter(server);
 new ConfigRouter(server);
 new CDRouter(server);
@@ -105,6 +129,10 @@ if(process.platform === "win32" && !DebugMode)
     process.exit(1);
 }
 
+/**
+ * @description
+ * Caches everything
+ */
 reCache();
 
 const SOCKET = new SocketHandler(io, db);
