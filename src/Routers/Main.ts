@@ -1,7 +1,6 @@
 import { Router, Application } from "express";
 import passport from "passport";
 import EnsureAuth from "../Middlewares/EnsureAuth";
-import { Server } from "socket.io";
 import AW from "../Lib/Async";
 import CDModel from "../Models/CD";
 

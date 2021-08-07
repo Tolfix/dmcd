@@ -21,6 +21,9 @@ function Toast(msg, status, title)
     $(document).ready(function(){
         $('.toast').toast('show');
     });
+
+    new Notification(`DMCD | ${status} | ${title}`, { body: msg, icon: "https://cdn.tolfix.com/images/TX-Small.png" });
+
     let tempCount = toastCount;
     document.querySelector(`#toast-button-${toastCount}`).addEventListener("click", (msg) => {
         document.querySelector(`#toast-${tempCount}`).remove()

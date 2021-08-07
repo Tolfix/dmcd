@@ -18,6 +18,10 @@ export default class SocketHandler
         this.db = db;
     }
 
+    /**
+     * @description
+     * Checks if the string is a cd
+     */
     private isCD(aString: string): Boolean
     {
         if(aString.includes("cd-"))
@@ -25,11 +29,19 @@ export default class SocketHandler
         return false;
     }
 
+    /**
+     * @description
+     * Splits a string to get a cd from <Lib/CDSocket.ts>
+     */
     private getCD(aString: string): string
     {
         return (((aString.split("-"))[1]))
     }
 
+    /**
+     * @description
+     * Sends a email if that event is enabled.
+     */
     private EmailCD(cd: IDCD, status: Statues | "log" | string, ...content: string[])
     {
         // Are we allowed to send emails for this CD?
@@ -61,6 +73,11 @@ export default class SocketHandler
 
     }
 
+    /**
+     * @description
+     * Logs to the database.
+     * As well emitting it to the socket.
+     */
     private logToDB(type: CDEmitLog | "log", ...msg: any[]): Promise<Boolean>
     {
         return new Promise(async (resolve, reject) => {
@@ -98,6 +115,11 @@ export default class SocketHandler
         })
     }
 
+    /**
+     * 
+     * @description
+     * Emits.
+     */
     public emit(event: any, ...args: any[]): void
     {
         this.io.emit(event, args);

@@ -8,6 +8,13 @@ export const DebugMode = process.env.DEBUG === "true" ? true : false;
 export const MongoDB_URI = process.env.MONGODB_URI ?? "mongodb://localhost/dmcd";
 export const PORT = 56251;
 export const Session_Secret = process.env.SESSION_SECRET ?? undefined;
+
+/**
+ * 
+ * @returns {ISMTP}
+ * @description
+ * Gives the SMTP configs from database.
+ */
 export const GetSMTPConfig = () => {
     return new Promise<ISMTP|null>(async (resolve, reject) =>
     {
@@ -25,6 +32,10 @@ export const GetSMTPConfig = () => {
         return resolve(c)
     })
 };
+/**
+ * @description
+ * Contains all "general" configs in a map
+ */
 export const ConfigMap = new Map<keyof IConfigMapIndex,  IConfigMapIndex[keyof IConfigMapIndex]>();
 export const Dir = ((__dirname.replace("\\build", "")).replace("/build", ""));
 export const DockerDir = Dir+"/Docker";

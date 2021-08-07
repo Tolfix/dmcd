@@ -1,6 +1,5 @@
 import { Router, Application } from "express";
 import EnsureAuth from "../Middlewares/EnsureAuth";
-import { Server } from "socket.io";
 import fs from "fs";
 import { ENV, ICD, IDCD, PORTS } from "../Interfaces/CD";
 import AW from "../Lib/Async";
