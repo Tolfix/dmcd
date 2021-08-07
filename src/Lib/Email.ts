@@ -3,6 +3,10 @@ import mail from "nodemailer";
 import AW from "./Async";
 import { GetSMTPConfig } from "../Config";
 
+/**
+ * @description
+ * Send a email
+ */
 export async function SendEmail(
     reciever: string, 
     subject: string, 
